@@ -1,0 +1,58 @@
+/* ==================== GENERAL ==================== */
+.root {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 14px;
+}
+
+/* ==================== LOGIN SCREEN ==================== */
+.login-title {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 24px;
+}
+
+/* ==================== BUTTONS ==================== */
+.button {
+    -fx-cursor: hand;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+}
+
+.button:hover {
+    -fx-opacity: 0.9;
+}
+
+.button:pressed {
+    -fx-opacity: 0.8;
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* ==================== TEXT FIELDS ==================== */
+.text-field, .password-field {
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-color: #dfe6e9;
+    -fx-border-width: 1px;
+}
+
+.text-field:focused, .password-field:focused {
+    -fx-border-color: #3498db;
+    -fx-border-width: 2px;
+}
+
+/* ==================== CHECKBOX ==================== */
+.check-box {
+    -fx-cursor: hand;
+}
+
+/* ==================== LABELS ==================== */
+.label-error {
+    -fx-text-fill: #e74c3c;
+    -fx-font-weight: bold;
+}
+
+.label-success {
+    -fx-text-fill: #27ae60;
+    -fx-font-weight: bold;
+}

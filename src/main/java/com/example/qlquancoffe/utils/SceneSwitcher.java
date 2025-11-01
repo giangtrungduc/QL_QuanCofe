@@ -29,12 +29,6 @@ public class SceneSwitcher {
     /** Base path cho FXML files */
     private static final String FXML_BASE_PATH = "/com/example/qlquancoffe/views/";
 
-    /** Base path cho CSS files */
-    private static final String CSS_BASE_PATH = "/com/example/qlquancoffe/css/";
-
-    /** Tên file CSS chính */
-    private static final String MAIN_CSS = "styles.css";
-
 
     // ==================== INITIALIZATION ====================
 
@@ -113,7 +107,7 @@ public class SceneSwitcher {
     // ==================== SCENE SWITCHING ====================
 
     /**
-     * Chuyển sang màn hình mới (generic method)
+     * Chuyển sang màn hình mới
      * @param fxmlFileName Tên file FXML (VD: "LoginView.fxml")
      * @param title Tiêu đề cửa sổ
      * @param width Chiều rộng (0 = giữ nguyên)
@@ -128,9 +122,6 @@ public class SceneSwitcher {
 
             // Tạo Scene
             Scene scene = new Scene(root);
-
-            // Áp dụng CSS
-            applyCss(scene);
 
             // Cập nhật Stage
             primaryStage.setScene(scene);
@@ -178,7 +169,6 @@ public class SceneSwitcher {
             Parent root = loader.load();
 
             Scene scene = new Scene(root);
-            applyCss(scene);
 
             primaryStage.setScene(scene);
             primaryStage.setTitle(title);
@@ -264,7 +254,6 @@ public class SceneSwitcher {
             Parent root = loader.load();
 
             Scene scene = new Scene(root);
-            applyCss(scene);
 
             Stage dialogStage = new Stage();
             dialogStage.setScene(scene);
@@ -292,24 +281,6 @@ public class SceneSwitcher {
     }
 
 
-    // ==================== CSS MANAGEMENT ====================
-
-    /**
-     * Áp dụng CSS vào Scene
-     * @param scene Scene cần áp dụng CSS
-     */
-    private static void applyCss(Scene scene) {
-        try {
-            String cssPath = CSS_BASE_PATH + MAIN_CSS;
-            String css = SceneSwitcher.class.getResource(cssPath).toExternalForm();
-            scene.getStylesheets().add(css);
-        } catch (Exception e) {
-            System.err.println("⚠️ Không tìm thấy file CSS: " + MAIN_CSS);
-            // Không throw exception, ứng dụng vẫn chạy được
-        }
-    }
-
-
     // ==================== ALERT UTILITIES ====================
 
     /**
@@ -319,7 +290,9 @@ public class SceneSwitcher {
      */
     public static void showErrorAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.initOwner(primaryStage);
+        if (primaryStage != null && primaryStage.getScene() != null) {
+            alert.initOwner(primaryStage);
+        }
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
@@ -333,7 +306,9 @@ public class SceneSwitcher {
      */
     public static void showInfoAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.initOwner(primaryStage);
+        if (primaryStage != null && primaryStage.getScene() != null) {
+            alert.initOwner(primaryStage);
+        }
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
@@ -347,7 +322,9 @@ public class SceneSwitcher {
      */
     public static void showWarningAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.initOwner(primaryStage);
+        if (primaryStage != null && primaryStage.getScene() != null) {
+            alert.initOwner(primaryStage);
+        }
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
@@ -361,7 +338,9 @@ public class SceneSwitcher {
      */
     public static void showSuccessAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.initOwner(primaryStage);
+        if (primaryStage != null && primaryStage.getScene() != null) {
+            alert.initOwner(primaryStage);
+        }
         alert.setTitle(title);
         alert.setHeaderText("✅ " + title);
         alert.setContentText(content);
@@ -376,7 +355,9 @@ public class SceneSwitcher {
      */
     public static boolean showConfirmAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.initOwner(primaryStage);
+        if (primaryStage != null && primaryStage.getScene() != null) {
+            alert.initOwner(primaryStage);
+        }
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
@@ -395,7 +376,9 @@ public class SceneSwitcher {
      */
     public static boolean showConfirmAlert(String title, String content, String okText, String cancelText) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.initOwner(primaryStage);
+        if (primaryStage != null && primaryStage.getScene() != null) {
+            alert.initOwner(primaryStage);
+        }
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);

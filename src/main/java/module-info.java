@@ -15,5 +15,9 @@ module com.example.qlquancoffe {
     requires com.zaxxer.hikari;
 
     opens com.example.qlquancoffe to javafx.fxml;
+    opens com.example.qlquancoffe.controllers to javafx.fxml;
+    opens com.example.qlquancoffe.models to javafx.fxml;
     exports com.example.qlquancoffe;
+    exports com.example.qlquancoffe.controllers;
+    exports com.example.qlquancoffe.models;
 }
