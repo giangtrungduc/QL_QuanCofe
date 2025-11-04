@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="650.0" prefWidth="1150.0"
+            stylesheets="@../../css/nhanvien/LichSuBanStyles.css"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.qlquancoffe.controllers.quanly.LichSuHoaDonController">
+
+    <top>
+        <VBox styleClass="view-header-container">
+            <HBox alignment="CENTER_LEFT" spacing="15" styleClass="view-header">
+                <Label styleClass="header-icon" text="📜" />
+                <VBox>
+                    <Label styleClass="header-title" text="LỊCH SỬ HÓA ĐƠN (QUẢN LÝ)" />
+                    <Label styleClass="header-subtitle" text="Xem và lọc toàn bộ hóa đơn của hệ thống" />
+                </VBox>
+            </HBox>
+
+            <HBox styleClass="admin-filter-bar">
+                <Label styleClass="filter-label" text="Ngày:" />
+                <DatePicker fx:id="datePicker" prefWidth="150.0" />
+                <Button onAction="#handleFilterToday" styleClass="btn-filter" text="Hôm nay" />
+                <Button onAction="#handleFilterYesterday" styleClass="btn-filter" text="Hôm qua" />
+
+                <Separator orientation="VERTICAL" />
+
+                <Label styleClass="filter-label" text="Nhân viên:" />
+                <ComboBox fx:id="cboNhanVien" styleClass="filter-combo" />
+
+                <Label styleClass="filter-label" text="Trạng thái:" />
+                <ComboBox fx:id="cboTrangThai" styleClass="filter-combo" />
+
+                <Region HBox.hgrow="ALWAYS" />
+                <Button fx:id="btnLamMoi" onAction="#handleLamMoi" styleClass="btn-filter" text="Làm mới" />
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <SplitPane dividerPositions="0.60" styleClass="split-pane">
+
+            <VBox spacing="10" styleClass="list-panel">
+                <padding><Insets top="10" right="10" bottom="10" left="10" /></padding>
+                <Label styleClass="panel-title" text="Danh sách Hóa đơn" />
+                <TableView fx:id="tableHoaDon" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colMaHD" prefWidth="60.0" text="Mã HĐ" />
+                        <TableColumn fx:id="colNhanVien" prefWidth="140.0" text="Nhân viên" />
+                        <TableColumn fx:id="colNgayTao" prefWidth="150.0" text="Thời gian" />
+                        <TableColumn fx:id="colTrangThai" prefWidth="100.0" text="Trạng thái" />
+                        <TableColumn fx:id="colTongTien" prefWidth="120.0" text="Tổng tiền" />
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
+                </TableView>
+            </VBox>
+
+            <VBox spacing="10" styleClass="detail-panel">
+                <padding><Insets top="10" right="10" bottom="10" left="10" /></padding>
+                <HBox alignment="CENTER_LEFT" spacing="5">
+                    <Label styleClass="panel-title" text="Chi tiết Hóa đơn:" />
+                    <Label fx:id="lblChiTietMaHD" styleClass="panel-title-id" text="#---" />
+                </HBox>
+                <TableView fx:id="tableChiTiet" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colTenSP" prefWidth="250.0" text="Tên sản phẩm" />
+                        <TableColumn fx:id="colSoLuong" prefWidth="60.0" text="SL" />
+                        <TableColumn fx:id="colDonGia" prefWidth="120.0" text="Đơn giá" />
+                        <TableColumn fx:id="colThanhTien" prefWidth="130.0" text="Thành tiền" />
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
+                    <placeholder>
+                        <Label styleClass="empty-placeholder" text="Chọn một hóa đơn từ danh sách bên trái" />
+                    </placeholder>
+                </TableView>
+            </VBox>
+        </SplitPane>
+    </center>
+
+    <bottom>
+        <HBox styleClass="admin-summary-bar">
+            <Label styleClass="summary-title" text="Thống kê (theo bộ lọc):" />
+            <Separator orientation="VERTICAL" />
+            <VBox styleClass="stat-card">
+                <Label styleClass="stat-label" text="Tổng doanh thu (PAID)" />
+                <Label fx:id="lblTongDoanhThu" styleClass="stat-value, stat-value-revenue" text="0 ₫" />
+            </VBox>
+            <VBox styleClass="stat-card">
+                <Label styleClass="stat-label" text="Tổng đơn (PAID)" />
+                <Label fx:id="lblTongDonPaid" styleClass="stat-value, stat-value-paid" text="0" />
+            </VBox>
+            <VBox styleClass="stat-card">
+                <Label styleClass="stat-label" text="Tổng đơn (PENDING)" />
+                <Label fx:id="lblTongDonPending" styleClass="stat-value, stat-value-pending" text="0" />
+            </VBox>
+            <VBox styleClass="stat-card">
+                <Label styleClass="stat-label" text="Tổng đơn (CANCELLED)" />
+                <Label fx:id="lblTongDonCancelled" styleClass="stat-value, stat-value-cancelled" text="0" />
+            </VBox>
+        </HBox>
+    </bottom>
+</BorderPane>

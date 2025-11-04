@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="650.0" prefWidth="1150.0"
+            stylesheets="@../../css/quanly/SanPhamStyles.css"
+            xmlns="http://javafx.com/javafx/21.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.qlquancoffe.controllers.quanly.NhanVienController">
+
+    <top>
+        <VBox styleClass="view-header-container">
+            <HBox alignment="CENTER_LEFT" spacing="15" styleClass="view-header">
+                <Label styleClass="header-icon" text="👥" />
+                <VBox>
+                    <Label styleClass="header-title" text="QUẢN LÝ NHÂN VIÊN" />
+                    <Label styleClass="header-subtitle" text="Thêm, sửa, xóa tài khoản nhân viên" />
+                </VBox>
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="lblTongNhanVien" styleClass="stat-badge" text="Tổng: 0 NV" />
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <SplitPane dividerPositions="0.65" styleClass="main-split-pane">
+
+            <VBox styleClass="master-pane" spacing="10.0">
+                <padding>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                </padding>
+                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="toolbar">
+                    <TextField fx:id="txtTimKiem" promptText="🔍 Tìm kiếm (Tên, Tên đăng nhập)..." styleClass="search-field" HBox.hgrow="ALWAYS" />
+                    <Label text="Lọc vai trò:" />
+                    <ComboBox fx:id="cboLocVaiTro" prefWidth="150.0" styleClass="filter-combo" />
+                </HBox>
+
+                <TableView fx:id="tableNhanVien" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colID" prefWidth="50.0" styleClass="col-id" text="ID" />
+                        <TableColumn fx:id="colHoTen" prefWidth="200.0" styleClass="col-name" text="Họ tên" />
+                        <TableColumn fx:id="colTenDangNhap" prefWidth="150.0" text="Tên đăng nhập" />
+                        <TableColumn fx:id="colVaiTro" prefWidth="100.0" text="Vai trò" />
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
+                </TableView>
+            </VBox>
+
+            <VBox fx:id="formContainer" styleClass="form-container">
+                <Label fx:id="lblFormTitle" styleClass="form-title" text="Thêm Nhân Viên Mới" />
+                <Separator />
+
+                <GridPane styleClass="form-grid">
+                    <columnConstraints>
+                        <ColumnConstraints halignment="RIGHT" minWidth="100.0" />
+                        <ColumnConstraints hgrow="ALWAYS" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="35.0" />
+                        <RowConstraints minHeight="35.0" />
+                        <RowConstraints minHeight="35.0" />
+                        <RowConstraints minHeight="35.0" />
+                    </rowConstraints>
+
+                    <Label text="Họ tên:" GridPane.rowIndex="0" />
+                    <TextField fx:id="txtHoTen" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                    <Label text="Tên đăng nhập:" GridPane.rowIndex="1" />
+                    <TextField fx:id="txtTenDangNhap" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                    <Label text="Vai trò:" GridPane.rowIndex="2" />
+                    <ComboBox fx:id="cbVaiTroForm" maxWidth="Infinity" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                    <Label text="Mật khẩu:" GridPane.rowIndex="3" />
+                    <PasswordField fx:id="txtMatKhau" promptText="Để trống nếu không đổi" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                </GridPane>
+
+                <Label fx:id="lblError" managed="false" style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;" visible="false" />
+
+                <Region VBox.vgrow="ALWAYS" />
+
+                <Separator />
+
+                <VBox spacing="10.0">
+                    <HBox spacing="10.0" styleClass="form-actions">
+                        <Button fx:id="btnThem" maxWidth="Infinity" onAction="#handleThem" styleClass="btn-primary" text="➕ Thêm" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnSua" disable="true" maxWidth="Infinity" onAction="#handleSua" styleClass="btn-warning" text="✏️ Sửa" HBox.hgrow="ALWAYS" />
+                    </HBox>
+                    <HBox spacing="10.0" styleClass="form-actions">
+                        <Button fx:id="btnXoa" disable="true" maxWidth="Infinity" onAction="#handleXoa" styleClass="btn-danger" text="🗑️ Xóa" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnLamMoi" maxWidth="Infinity" onAction="#handleLamMoi" styleClass="btn-info" text="🔄 Làm mới" HBox.hgrow="ALWAYS" />
+                    </HBox>
+                </VBox>
+            </VBox>
+        </SplitPane>
+    </center>
+</BorderPane>

@@ -1,10 +1,10 @@
 package com.example.qlquancoffe.controllers;
 
 import com.example.qlquancoffe.dao.HoaDonDAO;
-import com.example.qlquancoffe.dao.SanPhamDAO;
-import com.example.qlquancoffe.dao.TaiKhoanDAO;
+import com.example.qlquancoffe.dao.SanPhamDAO; // ✅ SỬA: Xóa import này
 import com.example.qlquancoffe.models.TaiKhoan;
 import com.example.qlquancoffe.utils.CurrencyUtil;
+import com.example.qlquancoffe.utils.DialogUtils; // ✅ SỬA: Thêm import
 import com.example.qlquancoffe.utils.SceneSwitcher;
 import javafx.animation.*;
 import javafx.application.Platform;
@@ -25,12 +25,8 @@ import java.util.List;
 
 /**
  * Controller cho màn hình chính (MainView)
- * PHÂN QUYỀN:
- * - QUẢN LÝ: Dashboard, Sản phẩm, Nhân viên, Doanh thu, Lịch sử HĐ
- * - NHÂN VIÊN: Bán hàng, Lịch sử bán
  */
 public class MainController {
-
     // ==================== TOP BAR ====================
     @FXML private Label lblSubtitle;
     @FXML private Label lblDateTime;
@@ -38,31 +34,22 @@ public class MainController {
     @FXML private Label lblUsername;
     @FXML private Label lblRole;
     @FXML private Button btnLogout;
-
     // ==================== SIDEBAR ====================
     @FXML private VBox sidebar;
-    @FXML private VBox menuQuanLy;      // Menu dành cho Quản lý
-    @FXML private VBox menuNhanVien;    // Menu dành cho Nhân viên
-
-    // Menu buttons - Quản lý
+    @FXML private VBox menuQuanLy;
+    @FXML private VBox menuNhanVien;
     @FXML private Button btnDashboardQL;
-    @FXML private Button btnDashboardNV;
     @FXML private Button btnSanPham;
     @FXML private Button btnNhanVien;
     @FXML private Button btnDoanhThu;
     @FXML private Button btnLichSuHoaDon;
-
-    // Menu buttons - Nhân viên
+    @FXML private Button btnDashboardNV;
     @FXML private Button btnBanHang;
     @FXML private Button btnLichSuBan;
-
-    // Menu buttons - Chung
     @FXML private Button btnHuongDan;
-
     // ==================== CENTER ====================
     @FXML private StackPane contentArea;
     @FXML private VBox defaultContent;
-
     @FXML private Label lblWelcome;
     @FXML private HBox statsContainerQL;
     @FXML private HBox statsContainerNV;
@@ -72,9 +59,10 @@ public class MainController {
     @FXML private Label lblSoDonHangNV;
     @FXML private Label lblSanPhamSapHet;
 
-    @FXML private HBox quickActionsQuanLy;     // Quick actions cho Quản lý
-    @FXML private HBox quickActionsNhanVien;   // Quick actions cho Nhân viên
+    @FXML private VBox statCardSapHet;
 
+    @FXML private HBox quickActionsQuanLy;
+    @FXML private HBox quickActionsNhanVien;
     // ==================== BOTTOM BAR ====================
     @FXML private Label lblStatus;
     @FXML private Label lblVersion;
@@ -85,16 +73,11 @@ public class MainController {
     private List<Button> menuButtons;
     private Timeline clockTimeline;
 
-    /**
-     * Khởi tạo controller
-     */
     @FXML
     public void initialize() {
         System.out.println("🏠 Khởi tạo MainController");
 
-        // Lấy thông tin user
         currentUser = SceneSwitcher.getCurrentUser();
-
         if (currentUser == null) {
             System.err.println("❌ Không tìm thấy thông tin user!");
             SceneSwitcher.switchToLogin();
@@ -103,109 +86,87 @@ public class MainController {
 
         // Khởi tạo UI
         initializeUserInfo();
-        initializeMenuByRole();  // ← PHÂN QUYỀN Ở ĐÂY
+        initializeMenuByRole();
         initializeClock();
 
-        // Load stats nếu là Quản lý
+        // Load stats theo vai trò
         if (currentUser.getVaiTro() == TaiKhoan.VaiTro.QuanLy) {
             loadDashboardStatsQL();
+        } else {
+            loadDashboardStatsNV();
         }
 
         System.out.println("✅ MainController đã sẵn sàng!");
     }
 
-    /**
-     * Khởi tạo thông tin user
-     */
     private void initializeUserInfo() {
+        // (Hàm này đã đúng, giữ nguyên)
         lblUsername.setText(currentUser.getHoTen());
         lblWelcome.setText("Chào mừng " + currentUser.getHoTen() + " đến với hệ thống!");
 
         if (currentUser.getVaiTro() == TaiKhoan.VaiTro.QuanLy) {
             lblRole.setText("Quản lý");
-            lblRole.setStyle("-fx-text-fill: #e74c3c;");
+            lblRole.getStyleClass().add("role-label-manager");
             lblSubtitle.setText("Hệ thống Quản lý");
         } else {
             lblRole.setText("Nhân viên");
-            lblRole.setStyle("-fx-text-fill: #3498db;");
+            lblRole.getStyleClass().add("role-label-staff");
             lblSubtitle.setText("Hệ thống POS - Bán hàng");
         }
-
         System.out.println("✅ Đã load thông tin user: " + currentUser.getHoTen());
     }
 
-    /**
-     * Khởi tạo menu theo vai trò
-     */
     private void initializeMenuByRole() {
         menuButtons = new ArrayList<>();
 
         if (currentUser.getVaiTro() == TaiKhoan.VaiTro.QuanLy) {
             // ==================== QUẢN LÝ ====================
             System.out.println("👔 Khởi tạo menu QUẢN LÝ");
-
-            // Hiển thị menu Quản lý
             menuQuanLy.setVisible(true);
             menuQuanLy.setManaged(true);
-
-            // Ẩn menu Nhân viên
             menuNhanVien.setVisible(false);
             menuNhanVien.setManaged(false);
-
-            // Hiển thị stats và quick actions
             statsContainerQL.setVisible(true);
             statsContainerQL.setManaged(true);
+            statsContainerNV.setVisible(false);
+            statsContainerNV.setManaged(false);
             quickActionsQuanLy.setVisible(true);
             quickActionsQuanLy.setManaged(true);
             quickActionsNhanVien.setVisible(false);
             quickActionsNhanVien.setManaged(false);
+            statCardSapHet.setVisible(false);
+            statCardSapHet.setManaged(false);
 
-            // Thêm buttons vào list
             menuButtons.add(btnDashboardQL);
             menuButtons.add(btnSanPham);
             menuButtons.add(btnNhanVien);
             menuButtons.add(btnDoanhThu);
             menuButtons.add(btnLichSuHoaDon);
-
-            // Set Dashboard làm active mặc định
             setActiveButton(btnDashboardQL);
 
         } else {
             // ==================== NHÂN VIÊN ====================
             System.out.println("👤 Khởi tạo menu NHÂN VIÊN");
-
-            // Ẩn menu Quản lý
             menuQuanLy.setVisible(false);
             menuQuanLy.setManaged(false);
-
-            // Hiển thị menu Nhân viên
             menuNhanVien.setVisible(true);
             menuNhanVien.setManaged(true);
-
-            // Ẩn stats, hiển thị quick actions nhân viên
+            statsContainerQL.setVisible(false);
+            statsContainerQL.setManaged(false);
             statsContainerNV.setVisible(true);
             statsContainerNV.setManaged(true);
             quickActionsQuanLy.setVisible(false);
             quickActionsQuanLy.setManaged(false);
             quickActionsNhanVien.setVisible(true);
             quickActionsNhanVien.setManaged(true);
-
-            // Thêm buttons vào list
             menuButtons.add(btnDashboardNV);
             menuButtons.add(btnBanHang);
             menuButtons.add(btnLichSuBan);
-
-            // Set Dashboard làm active mặc định
             setActiveButton(btnDashboardNV);
         }
-
-        // Menu chung cho cả 2
         menuButtons.add(btnHuongDan);
     }
 
-    /**
-     * Khởi tạo đồng hồ real-time
-     */
     private void initializeClock() {
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("EEEE");
@@ -213,7 +174,6 @@ public class MainController {
         clockTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             LocalDateTime now = LocalDateTime.now();
             lblDateTime.setText(now.format(timeFormatter));
-
             String day = now.format(dayFormatter);
             String viDay = switch(day) {
                 case "Monday" -> "Thứ Hai";
@@ -227,7 +187,6 @@ public class MainController {
             };
             lblDayOfWeek.setText(viDay);
         }));
-
         clockTimeline.setCycleCount(Timeline.INDEFINITE);
         clockTimeline.play();
     }
@@ -239,101 +198,79 @@ public class MainController {
         new Thread(() -> {
             try {
                 HoaDonDAO hoaDonDAO = new HoaDonDAO();
-                SanPhamDAO sanPhamDAO = new SanPhamDAO();
 
                 BigDecimal doanhThu = hoaDonDAO.getTongDoanhThuByDate(LocalDate.now());
                 int soDon = hoaDonDAO.countHoaDonByDate(LocalDate.now());
-                int sanPhamSapHet = sanPhamDAO.getSanPhamSapHet(10).size();
 
                 Platform.runLater(() -> {
                     lblDoanhThuHomNayQL.setText(CurrencyUtil.formatVND(doanhThu));
                     lblSoDonHangQL.setText(soDon + " đơn");
-                    lblSanPhamSapHet.setText(sanPhamSapHet + " SP");
                 });
 
             } catch (Exception e) {
-                System.err.println("Lỗi load thống kê: " + e.getMessage());
+                System.err.println("❌ Lỗi load thống kê Quản lý: " + e.getMessage());
+                e.printStackTrace();
             }
         }).start();
     }
 
     /**
-     * Load Thống kê Dashboard (Nhân viên)
+     * Load thống kê Dashboard (Nhân viên)
      */
-    private void loadDashboardStatsNV(){
+    private void loadDashboardStatsNV() {
         new Thread(() -> {
             try {
                 HoaDonDAO hoaDonDAO = new HoaDonDAO();
-                SanPhamDAO sanPhamDAO = new SanPhamDAO();
-
                 BigDecimal doanhThu = hoaDonDAO.getTongDoanhThuNhanVien(currentUser.getIdNhanVien(), LocalDate.now());
                 int soHoaDon = hoaDonDAO.countHoaDonNhanVien(currentUser.getIdNhanVien(), LocalDate.now());
+
                 Platform.runLater(() -> {
                     lblDoanhThuHomNayNV.setText(CurrencyUtil.formatVND(doanhThu));
-                    lblSoDonHangNV.setText(soHoaDon + "đơn");
+                    lblSoDonHangNV.setText(soHoaDon + " đơn");
                 });
             } catch (Exception e) {
-                System.err.println("Lỗi load thống kê: " + e.getMessage());
+                System.err.println("❌ Lỗi load thống kê Nhân viên: " + e.getMessage());
+                e.printStackTrace();
             }
         }).start();
     }
 
-
-    // ==================== MENU ACTIONS - QUẢN LÝ ====================
-
-    @FXML
-    private void loadDashboardQL() {
+    // ==================== MENU ACTIONS (Giữ nguyên) ====================
+    @FXML private void loadDashboardQL() {
         setActiveButton(btnDashboardQL);
         showDefaultContent();
         loadDashboardStatsQL();
     }
-
-    @FXML
-    private void loadSanPham() {
+    @FXML private void loadSanPham() {
         setActiveButton(btnSanPham);
         loadView("quanly/SanPhamView.fxml", "Quản lý Sản phẩm");
     }
-
-    @FXML
-    private void loadNhanVien() {
+    @FXML private void loadNhanVien() {
         setActiveButton(btnNhanVien);
         loadView("quanly/NhanVienView.fxml", "Quản lý Nhân viên");
     }
-
-    @FXML
-    private void loadDoanhThu() {
+    @FXML private void loadDoanhThu() {
         setActiveButton(btnDoanhThu);
-        loadView("quanly/DoanhThuView.fxml", "Báo cáo Doanh thu");
+        loadView("quanly/BaoCaoView.fxml", "Báo cáo Doanh thu");
     }
-
-    @FXML
-    private void loadLichSuHoaDon() {
+    @FXML private void loadLichSuHoaDon() {
         setActiveButton(btnLichSuHoaDon);
         loadView("quanly/LichSuHoaDonView.fxml", "Lịch sử Hóa đơn");
     }
-
-    // ==================== MENU ACTIONS - NHÂN VIÊN ====================
-
-    @FXML
-    private void loadDashboardNV(){
+    @FXML private void loadDashboardNV() {
         setActiveButton(btnDashboardNV);
         showDefaultContent();
         loadDashboardStatsNV();
     }
-
-    @FXML
-    private void loadBanHang() {
+    @FXML private void loadBanHang() {
         setActiveButton(btnBanHang);
         loadView("nhanvien/BanHangView.fxml", "Bán hàng - POS");
     }
-
-    @FXML
-    private void loadLichSuBan() {
+    @FXML private void loadLichSuBan() {
         setActiveButton(btnLichSuBan);
         loadView("nhanvien/LichSuBanView.fxml", "Lịch sử bán hàng");
     }
-
-    // ==================== MENU ACTIONS - CHUNG ====================
+    // ==========================================================
 
     @FXML
     private void showHelp() {
@@ -346,11 +283,12 @@ public class MainController {
                 "5. Lịch sử HĐ: Xem tất cả hóa đơn\n\n" +
                 "Liên hệ: admin@coffee.com"
                 : "📖 HƯỚNG DẪN SỬ DỤNG\n\n" +
-                "1. Bán hàng: Tạo đơn hàng mới\n" +
-                "2. Lịch sử bán: Xem các đơn đã tạo\n\n" +
+                "1. Dashboard: Xem thống kê cá nhân\n" +
+                "2. Bán hàng: Tạo đơn hàng mới\n" +
+                "3. Lịch sử bán: Xem các đơn đã tạo\n\n" +
                 "Liên hệ hỗ trợ: support@coffee.com";
 
-        SceneSwitcher.showInfoAlert("Hướng dẫn sử dụng", helpText);
+        DialogUtils.showInfo("Hướng dẫn sử dụng", helpText);
     }
 
     @FXML
@@ -361,28 +299,9 @@ public class MainController {
         SceneSwitcher.logout();
     }
 
-    @FXML
-    private void onLogoutHover() {
-        ScaleTransition st = new ScaleTransition(Duration.millis(100), btnLogout);
-        st.setToX(1.1);
-        st.setToY(1.1);
-        st.play();
-    }
-
-    @FXML
-    private void onLogoutExit() {
-        ScaleTransition st = new ScaleTransition(Duration.millis(100), btnLogout);
-        st.setToX(1.0);
-        st.setToY(1.0);
-        st.play();
-    }
-
-    // ==================== HELPER METHODS ====================
-
     private void loadView(String fxmlPath, String viewName) {
         try {
             System.out.println("📂 Đang load view: " + fxmlPath);
-
             defaultContent.setVisible(false);
             defaultContent.setManaged(false);
 
@@ -390,7 +309,6 @@ public class MainController {
                     getClass().getResource("/com/example/qlquancoffe/views/" + fxmlPath)
             );
             Parent view = loader.load();
-
             contentArea.getChildren().clear();
             contentArea.getChildren().add(view);
 
@@ -398,7 +316,6 @@ public class MainController {
             fade.setFromValue(0);
             fade.setToValue(1);
             fade.play();
-
             System.out.println("✅ Đã load view: " + viewName);
 
         } catch (IOException e) {
@@ -413,7 +330,6 @@ public class MainController {
         contentArea.getChildren().add(defaultContent);
         defaultContent.setVisible(true);
         defaultContent.setManaged(true);
-
         FadeTransition fade = new FadeTransition(Duration.millis(300), defaultContent);
         fade.setFromValue(0);
         fade.setToValue(1);
@@ -423,33 +339,24 @@ public class MainController {
     private void showPlaceholder(String viewName) {
         VBox placeholder = new VBox(20);
         placeholder.setAlignment(javafx.geometry.Pos.CENTER);
-        placeholder.setStyle("-fx-padding: 50;");
-
+        placeholder.getStyleClass().add("placeholder-container");
         Label icon = new Label("🚧");
-        icon.setStyle("-fx-font-size: 80px;");
-
+        icon.getStyleClass().add("placeholder-icon");
         Label title = new Label(viewName);
-        title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
-
+        title.getStyleClass().add("placeholder-title");
         Label message = new Label("Màn hình này đang được phát triển...");
-        message.setStyle("-fx-font-size: 14px; -fx-text-fill: #7f8c8d;");
-
+        message.getStyleClass().add("placeholder-message");
         Button btnBack = new Button("🏠 Về Dashboard");
-        btnBack.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; " +
-                "-fx-font-size: 14px; -fx-padding: 10 20; -fx-cursor: hand;");
+        btnBack.getStyleClass().addAll("action-btn", "action-btn-blue");
 
         if (currentUser.getVaiTro() == TaiKhoan.VaiTro.QuanLy) {
             btnBack.setOnAction(e -> loadDashboardQL());
         } else {
-            btnBack.setText("🛒 Về Bán hàng");
-            btnBack.setOnAction(e -> loadBanHang());
+            btnBack.setOnAction(e -> loadDashboardNV());
         }
-
         placeholder.getChildren().addAll(icon, title, message, btnBack);
-
         contentArea.getChildren().clear();
         contentArea.getChildren().add(placeholder);
-
         FadeTransition fade = new FadeTransition(Duration.millis(300), placeholder);
         fade.setFromValue(0);
         fade.setToValue(1);
@@ -458,14 +365,11 @@ public class MainController {
 
     private void setActiveButton(Button button) {
         for (Button btn : menuButtons) {
-            btn.setStyle(btn.getStyle().replace("-fx-background-color: #3498db;", "-fx-background-color: transparent;")
-                    .replace("-fx-text-fill: white;", "-fx-text-fill: #2c3e50;"));
+            btn.getStyleClass().remove("menu-button-active");
         }
-
         if (button != null) {
-            String currentStyle = button.getStyle();
-            if (!currentStyle.contains("-fx-background-color: #27ae60")) {
-                button.setStyle(currentStyle + "-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;");
+            if (!button.getStyleClass().contains("menu-button-active")) {
+                button.getStyleClass().add("menu-button-active");
             }
             currentActiveButton = button;
         }

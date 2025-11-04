@@ -19,7 +19,6 @@
 
     <!-- LOGO & TITLE -->
     <VBox alignment="CENTER" spacing="10">
-        <!-- Icon/Logo (có thể thay bằng ImageView) -->
         <Label style="-fx-font-size: 60px;" text="☕" />
 
         <Label styleClass="login-title" text="QUẢN LÝ QUÁN CÀ PHÊ">

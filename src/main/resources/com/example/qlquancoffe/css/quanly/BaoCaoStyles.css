@@ -1,0 +1,197 @@
+/* ==================== REPORT HEADER (TOP) ==================== */
+.report-header {
+    -fx-padding: 14px;
+    -fx-background-color: linear-gradient(to right, #1f2937, #0f172a);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 14, 0.2, 0, 2);
+    -fx-alignment: center-left;
+    -fx-spacing: 10px;
+}
+
+.report-header .label {
+    -fx-text-fill: #cbd5e1;
+    -fx-font-size: 13px;
+}
+
+.report-header .title {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+/* ==================== TAB PANE ==================== */
+.report-tab-pane {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.report-tab-pane .tab-header-area {
+    -fx-background-color: transparent;
+    -fx-padding: 5 0 0 0;
+}
+
+.report-tab-pane .tab {
+    -fx-background-color: #e5e7eb;
+    -fx-background-insets: 0;
+    -fx-background-radius: 8 8 0 0;
+    -fx-padding: 8px 15px;
+}
+
+.report-tab-pane .tab-label {
+    -fx-text-fill: #4b5563;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.report-tab-pane .tab:selected {
+    -fx-background-color: white;
+    -fx-padding: 10px 15px; /* Cao hơn một chút khi được chọn */
+}
+
+.report-tab-pane .tab:selected .tab-label {
+    -fx-text-fill: #1f2937;
+}
+
+/* ==================== TAB CONTENT ==================== */
+.tab-content-box {
+    -fx-background-color: white;
+    -fx-background-radius: 0 8 8 8;
+    -fx-padding: 14px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,.06), 10, 0.3, 0, 2);
+    -fx-spacing: 12px;
+}
+
+.content-title {
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+    -fx-font-size: 14px;
+}
+
+.summary-label {
+    -fx-text-fill: #334155;
+    -fx-font-size: 13px;
+}
+
+.summary-total {
+    -fx-text-fill: #1f2937;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.footnote-label {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 11px;
+    -fx-font-style: italic;
+}
+
+/* ==================== TREE TABLE VIEW ==================== */
+.tree-table-view {
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+}
+
+.tree-table-view .column-header-background {
+    -fx-background-color: #34495e;
+}
+
+.tree-table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-padding: 10px;
+}
+
+.tree-table-view .tree-table-row-cell {
+    -fx-font-size: 13px;
+}
+
+/* Hàng danh mục (hàng cha) */
+.category-row .tree-cell,
+.category-row .label {
+    -fx-font-weight: bold !important;
+    -fx-text-fill: #1f2937;
+    -fx-background-color: #f3f4f6;
+}
+
+/* Căn chỉnh cột */
+.col-number {
+    -fx-alignment: CENTER_RIGHT;
+    -fx-font-family: "Consolas", monospace;
+}
+.col-money {
+    -fx-alignment: CENTER_RIGHT;
+    -fx-font-weight: bold;
+    -fx-font-family: "Consolas", monospace;
+}
+
+/* ==================== RIGHT SIDEBAR (TOP 3) ==================== */
+.top-products-pane {
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0 0 0 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 8, 0, -2, 0);
+    -fx-pref-width: 280px; /* Kích thước panel bên phải */
+    -fx-spacing: 10px;
+}
+
+.top-products-header {
+    -fx-padding: 0 0 5px 0;
+}
+
+.top-products-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1f2937;
+    -fx-padding: 0 0 0 10px;
+}
+
+.placeholder-text {
+    -fx-font-size: 13px;
+    -fx-text-fill: #95a5a6;
+    -fx-alignment: center;
+}
+
+/* Style cho 1 thẻ Top 3 */
+.top-product-card {
+    -fx-background-color: #f9fafb;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 12px;
+    -fx-spacing: 10px;
+    -fx-alignment: center-left;
+}
+
+.top-product-rank {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #9ca3af; /* Gray */
+}
+
+/* Style riêng cho Top 1, 2, 3 */
+.top-product-card-1 .top-product-rank {
+    -fx-text-fill: #f59e0b; /* Gold */
+}
+.top-product-card-2 .top-product-rank {
+    -fx-text-fill: #a0aec0; /* Silver */
+}
+.top-product-card-3 .top-product-rank {
+    -fx-text-fill: #a16207; /* Bronze */
+}
+
+.top-product-details {
+    -fx-spacing: 2px;
+}
+
+.top-product-name {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1f2937;
+}
+
+.top-product-qty {
+    -fx-font-size: 12px;
+    -fx-text-fill: #e74c3c;
+    -fx-font-weight: bold;
+}

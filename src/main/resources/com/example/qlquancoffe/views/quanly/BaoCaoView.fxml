@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="650.0" prefWidth="1150.0"
+            stylesheets="@../../css/quanly/BaoCaoStyles.css"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.qlquancoffe.controllers.quanly.BaoCaoController">
+
+    <top>
+        <HBox styleClass="report-header">
+            <children>
+                <Label text="📈 DOANH THU" styleClass="title" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label text="Ngày:" />
+                <DatePicker fx:id="dpNgay" onAction="#onChangeNgay" prefWidth="150.0" />
+                <Label text="Tháng:" />
+                <DatePicker fx:id="dpThang" onAction="#onChangeThang" prefWidth="150.0" />
+            </children>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox style="-fx-padding: 15;">
+            <TabPane fx:id="tabPane" styleClass="report-tab-pane" tabClosingPolicy="UNAVAILABLE">
+                <tabs>
+                    <Tab text="Doanh thu theo ngày" fx:id="tabNgay">
+                        <VBox styleClass="tab-content-box">
+                            <HBox alignment="CENTER_LEFT" spacing="12">
+                                <Label text="Chi tiết NGÀY (Danh mục → Sản phẩm)" styleClass="content-title" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Label fx:id="lblTongSoLuongNgay" styleClass="summary-label" />
+                                <Separator orientation="VERTICAL" prefHeight="16" />
+                                <Label fx:id="lblTongTienNgay" styleClass="summary-total" />
+                            </HBox>
+                            <TreeTableView fx:id="treeNgay" showRoot="false" VBox.vgrow="ALWAYS">
+                                <columns>
+                                    <TreeTableColumn fx:id="colTenNgay" text="Danh mục / Sản phẩm" prefWidth="420" />
+                                    <TreeTableColumn fx:id="colSoLuongNgay" text="Số lượng" prefWidth="110" styleClass="col-number" />
+                                    <TreeTableColumn fx:id="colDonGiaNgay" text="Đơn giá TB (đ)" prefWidth="150" styleClass="col-money" />
+                                    <TreeTableColumn fx:id="colDoanhThuNgay" text="Thành tiền (đ)" prefWidth="190" styleClass="col-money" />
+                                </columns>
+                                <columnResizePolicy>
+                                    <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                </columnResizePolicy>
+                            </TreeTableView>
+                            <Label text="* Hàng đậm là tổng theo danh mục." styleClass="footnote-label" />
+                        </VBox>
+                    </Tab>
+
+                    <Tab text="Doanh thu theo tháng" fx:id="tabThang">
+                        <VBox styleClass="tab-content-box">
+                            <HBox alignment="CENTER_LEFT" spacing="12">
+                                <Label text="Chi tiết THÁNG (Danh mục → Sản phẩm)" styleClass="content-title" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Label fx:id="lblTongSoLuongThang" styleClass="summary-label" />
+                                <Separator orientation="VERTICAL" prefHeight="16" />
+                                <Label fx:id="lblTongTienThang" styleClass="summary-total" />
+                            </HBox>
+                            <TreeTableView fx:id="treeThang" showRoot="false" VBox.vgrow="ALWAYS">
+                                <columns>
+                                    <TreeTableColumn fx:id="colTenThang" text="Danh mục / Sản phẩm" prefWidth="420" />
+                                    <TreeTableColumn fx:id="colSoLuongThang" text="Số lượng" prefWidth="110" styleClass="col-number" />
+                                    <TreeTableColumn fx:id="colDonGiaThang" text="Đơn giá TB (đ)" prefWidth="150" styleClass="col-money" />
+                                    <TreeTableColumn fx:id="colDoanhThuThang" text="Thành tiền (đ)" prefWidth="190" styleClass="col-money" />
+                                </columns>
+                                <columnResizePolicy>
+                                    <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                </columnResizePolicy>
+                            </TreeTableView>
+                            <Label text="* Hàng đậm là tổng theo danh mục." styleClass="footnote-label" />
+                        </VBox>
+                    </Tab>
+                </tabs>
+            </TabPane>
+        </VBox>
+    </center>
+
+    <right>
+        <VBox fx:id="topProductsPane" managed="false" styleClass="top-products-pane" visible="false">
+            <padding>
+                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+            </padding>
+            <HBox alignment="CENTER_LEFT" styleClass="top-products-header">
+                <Label text="🏆" styleClass="header-icon" />
+                <Label text="TOP BÁN CHẠY" styleClass="top-products-title" />
+            </HBox>
+            <Separator />
+            <VBox fx:id="topProductsList" spacing="10.0" VBox.vgrow="ALWAYS">
+                <padding>
+                    <Insets top="10.0" />
+                </padding>
+            </VBox>
+            <Label fx:id="lblTopProductsPlaceholder" managed="false" styleClass="placeholder-text" text="Không có dữ liệu cho tháng này." visible="false" />
+        </VBox>
+    </right>
+</BorderPane>

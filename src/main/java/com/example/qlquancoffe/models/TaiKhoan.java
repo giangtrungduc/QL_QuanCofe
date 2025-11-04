@@ -2,60 +2,67 @@ package com.example.qlquancoffe.models;
 
 import javafx.beans.property.*;
 
-import java.time.LocalDateTime;
-
+/**
+ * Model cho bảng taikhoan
+ */
 public class TaiKhoan {
-    // Enum cho vai trò
+
+    // ==================== ENUM ====================
+
     public enum VaiTro {
-        QuanLy, NhanVien;
+        QuanLy("Quản lý"),
+        NhanVien("Nhân viên");
+
+        private final String displayName;
+
+        VaiTro(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
 
         @Override
         public String toString() {
-            return this == QuanLy ? "Quản lý" : "Nhân viên";
+            return displayName;
         }
     }
 
-    // Enum cho trạng thái
-    public enum TrangThai {
-        DangLamViec, DaNghiViec;
-
-        @Override
-        public String toString() {
-            return this == DangLamViec ? "Đang làm việc" : "Đã nghỉ việc";
-        }
-    }
+    // ==================== PROPERTIES ====================
 
     private final IntegerProperty idNhanVien;
     private final StringProperty hoTen;
     private final StringProperty tenDangNhap;
     private final StringProperty matKhau;
     private final ObjectProperty<VaiTro> vaiTro;
-    private final ObjectProperty<TrangThai> trangThai;
-    private final ObjectProperty<LocalDateTime> ngayTao;
 
-    // Constructor đầy đủ
+    // ==================== CONSTRUCTORS ====================
+
+    /**
+     * Constructor đầy đủ (từ DB)
+     */
     public TaiKhoan(int idNhanVien, String hoTen, String tenDangNhap,
-                    String matKhau, VaiTro vaiTro, TrangThai trangThai,
-                    LocalDateTime ngayTao) {
+                    String matKhau, VaiTro vaiTro) {
         this.idNhanVien = new SimpleIntegerProperty(idNhanVien);
         this.hoTen = new SimpleStringProperty(hoTen);
         this.tenDangNhap = new SimpleStringProperty(tenDangNhap);
         this.matKhau = new SimpleStringProperty(matKhau);
         this.vaiTro = new SimpleObjectProperty<>(vaiTro);
-        this.trangThai = new SimpleObjectProperty<>(trangThai);
-        this.ngayTao = new SimpleObjectProperty<>(ngayTao);
     }
 
-    // Constructor không có ID (dùng khi thêm mới)
+    /**
+     * Constructor tạo mới (chưa có ID)
+     */
     public TaiKhoan(String hoTen, String tenDangNhap, String matKhau, VaiTro vaiTro) {
-        this(0, hoTen, tenDangNhap, matKhau, vaiTro,
-                TrangThai.DangLamViec, LocalDateTime.now());
+        this(0, hoTen, tenDangNhap, matKhau, vaiTro);
     }
 
-    // Constructor mặc định
+    /**
+     * Constructor mặc định
+     */
     public TaiKhoan() {
-        this(0, "", "", "", VaiTro.NhanVien,
-                TrangThai.DangLamViec, LocalDateTime.now());
+        this(0, "", "", "", VaiTro.NhanVien);
     }
 
     // ==================== GETTERS & SETTERS ====================
@@ -125,34 +132,34 @@ public class TaiKhoan {
         return vaiTro;
     }
 
-    // Trạng thái
-    public TrangThai getTrangThai() {
-        return trangThai.get();
-    }
+    // ==================== HELPER METHODS ====================
 
-    public void setTrangThai(TrangThai trangThai) {
-        this.trangThai.set(trangThai);
-    }
-
-    public ObjectProperty<TrangThai> trangThaiProperty() {
-        return trangThai;
-    }
-
-    // Ngày tạo
-    public LocalDateTime getNgayTao() {
-        return ngayTao.get();
-    }
-
-    public void setNgayTao(LocalDateTime ngayTao) {
-        this.ngayTao.set(ngayTao);
-    }
-
-    public ObjectProperty<LocalDateTime> ngayTaoProperty() {
-        return ngayTao;
+    /**
+     * Kiểm tra là quản lý
+     */
+    public boolean isManager() {
+        return vaiTro.get() == VaiTro.QuanLy;
     }
 
     @Override
     public String toString() {
         return hoTen.get() + " (" + tenDangNhap.get() + ")";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        TaiKhoan other = (TaiKhoan) obj;
+        // Chỉ so sánh khi id > 0 (đã có trong DB)
+        if (this.idNhanVien.get() == 0 || other.idNhanVien.get() == 0) {
+            return false;
+        }
+        return idNhanVien.get() == other.idNhanVien.get();
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(idNhanVien.get());
     }
 }

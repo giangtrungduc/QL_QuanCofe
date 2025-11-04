@@ -5,6 +5,9 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+/**
+ * Model cho bảng danhmuc
+ */
 public class DanhMuc {
     private final IntegerProperty idDanhMuc;
     private final StringProperty tenDanhMuc;
@@ -54,5 +57,22 @@ public class DanhMuc {
     @Override
     public String toString() {
         return tenDanhMuc.get(); // Hiển thị trong ComboBox
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        DanhMuc other = (DanhMuc) obj;
+        // Chỉ so sánh khi id > 0 (đã có trong DB)
+        if (this.idDanhMuc.get() == 0 || other.idDanhMuc.get() == 0) {
+            return false;
+        }
+        return idDanhMuc.get() == other.idDanhMuc.get();
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(idDanhMuc.get());
     }
 }

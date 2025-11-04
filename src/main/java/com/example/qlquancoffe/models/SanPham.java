@@ -3,60 +3,77 @@ package com.example.qlquancoffe.models;
 import javafx.beans.property.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
+/**
+ * Model cho bảng sanpham
+ */
 public class SanPham {
-    // Enum cho trạng thái
+
+    // ==================== ENUM ====================
+
     public enum TrangThai {
-        ConHang, HetHang;
+        ConHang("Còn hàng"),
+        HetHang("Hết hàng"),
+        NgungKinhDoanh("Ngừng kinh doanh");
+
+        private final String displayName;
+
+        TrangThai(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
 
         @Override
         public String toString() {
-            return this == ConHang ? "Còn hàng" : "Hết hàng";
+            return displayName;
         }
     }
+
+    // ==================== PROPERTIES ====================
 
     private final IntegerProperty idSanPham;
     private final StringProperty tenSanPham;
     private final ObjectProperty<BigDecimal> giaBan;
     private final IntegerProperty soLuongTonKho;
-    private final StringProperty anhSanPham;
     private final IntegerProperty idDanhMuc;
     private final ObjectProperty<TrangThai> trangThai;
-    private final ObjectProperty<LocalDateTime> ngayTao;
-    private final ObjectProperty<LocalDateTime> ngayCapNhat;
+    private final StringProperty anhSanPham;
 
-    // Thêm property cho tên danh mục (để hiển thị trong TableView)
+    // Property phụ (để hiển thị)
     private final StringProperty tenDanhMuc;
 
-    // Constructor đầy đủ
+    // ==================== CONSTRUCTORS ====================
+
+    /**
+     * Constructor đầy đủ (từ DB)
+     */
     public SanPham(int idSanPham, String tenSanPham, BigDecimal giaBan,
-                   int soLuongTonKho, String anhSanPham, int idDanhMuc,
-                   TrangThai trangThai, LocalDateTime ngayTao,
-                   LocalDateTime ngayCapNhat) {
+                   int soLuongTonKho, int idDanhMuc, TrangThai trangThai, String anhSanPham) {
         this.idSanPham = new SimpleIntegerProperty(idSanPham);
         this.tenSanPham = new SimpleStringProperty(tenSanPham);
         this.giaBan = new SimpleObjectProperty<>(giaBan);
         this.soLuongTonKho = new SimpleIntegerProperty(soLuongTonKho);
-        this.anhSanPham = new SimpleStringProperty(anhSanPham);
         this.idDanhMuc = new SimpleIntegerProperty(idDanhMuc);
         this.trangThai = new SimpleObjectProperty<>(trangThai);
-        this.ngayTao = new SimpleObjectProperty<>(ngayTao);
-        this.ngayCapNhat = new SimpleObjectProperty<>(ngayCapNhat);
+        this.anhSanPham = new SimpleStringProperty(anhSanPham);
         this.tenDanhMuc = new SimpleStringProperty("");
     }
 
-    // Constructor không có ID (dùng khi thêm mới)
-    public SanPham(String tenSanPham, BigDecimal giaBan, int soLuongTonKho,
-                   String anhSanPham, int idDanhMuc) {
-        this(0, tenSanPham, giaBan, soLuongTonKho, anhSanPham, idDanhMuc,
-                TrangThai.ConHang, LocalDateTime.now(), LocalDateTime.now());
+    /**
+     * Constructor tạo mới (chưa có ID)
+     */
+    public SanPham(String tenSanPham, BigDecimal giaBan, int soLuongTonKho, int idDanhMuc, String anhSanPham) {
+        this(0, tenSanPham, giaBan, soLuongTonKho, idDanhMuc, TrangThai.ConHang, anhSanPham);
     }
 
-    // Constructor mặc định
+    /**
+     * Constructor mặc định
+     */
     public SanPham() {
-        this(0, "", BigDecimal.ZERO, 0, "", 0,
-                TrangThai.ConHang, LocalDateTime.now(), LocalDateTime.now());
+        this(0, "", BigDecimal.ZERO, 0, 0, TrangThai.ConHang, null);
     }
 
     // ==================== GETTERS & SETTERS ====================
@@ -113,24 +130,10 @@ public class SanPham {
         return soLuongTonKho;
     }
 
-    // Ảnh sản phẩm
-    public String getAnhSanPham() {
-        return anhSanPham.get();
-    }
-
-    public void setAnhSanPham(String anhSanPham) {
-        this.anhSanPham.set(anhSanPham);
-    }
-
-    public StringProperty anhSanPhamProperty() {
-        return anhSanPham;
-    }
-
     // ID Danh mục
     public int getIdDanhMuc() {
         return idDanhMuc.get();
     }
-
     public void setIdDanhMuc(int idDanhMuc) {
         this.idDanhMuc.set(idDanhMuc);
     }
@@ -152,33 +155,18 @@ public class SanPham {
         return trangThai;
     }
 
-    // Ngày tạo
-    public LocalDateTime getNgayTao() {
-        return ngayTao.get();
+    // Ảnh sản phẩm
+    public String getAnhSanPham() {
+        return anhSanPham.get();
+    }
+    public void setAnhSanPham(String anhSanPham) {
+        this.anhSanPham.set(anhSanPham);
+    }
+    public StringProperty anhSanPhamProperty() {
+        return anhSanPham;
     }
 
-    public void setNgayTao(LocalDateTime ngayTao) {
-        this.ngayTao.set(ngayTao);
-    }
-
-    public ObjectProperty<LocalDateTime> ngayTaoProperty() {
-        return ngayTao;
-    }
-
-    // Ngày cập nhật
-    public LocalDateTime getNgayCapNhat() {
-        return ngayCapNhat.get();
-    }
-
-    public void setNgayCapNhat(LocalDateTime ngayCapNhat) {
-        this.ngayCapNhat.set(ngayCapNhat);
-    }
-
-    public ObjectProperty<LocalDateTime> ngayCapNhatProperty() {
-        return ngayCapNhat;
-    }
-
-    // Tên danh mục (để hiển thị)
+    // Tên danh mục (phụ)
     public String getTenDanhMuc() {
         return tenDanhMuc.get();
     }
@@ -191,8 +179,34 @@ public class SanPham {
         return tenDanhMuc;
     }
 
+    // ==================== HELPER METHODS ====================
+
+    /**
+     * Kiểm tra sản phẩm có sẵn để bán không
+     */
+    public boolean isAvailableForSale() {
+        return trangThai.get() == TrangThai.ConHang && soLuongTonKho.get() > 0;
+    }
+
     @Override
     public String toString() {
         return tenSanPham.get();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        SanPham other = (SanPham) obj;
+        // Chỉ so sánh khi id > 0 (đã có trong DB)
+        if (this.idSanPham.get() == 0 || other.idSanPham.get() == 0) {
+            return false;
+        }
+        return idSanPham.get() == other.idSanPham.get();
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(idSanPham.get());
     }
 }

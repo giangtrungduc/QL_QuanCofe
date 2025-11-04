@@ -1,12 +1,9 @@
 package com.example.qlquancoffe;
 
-import com.example.qlquancoffe.dao.DanhMucDAO;
-import com.example.qlquancoffe.models.DanhMuc;
 import com.example.qlquancoffe.utils.DatabaseConnection;
+import com.example.qlquancoffe.utils.DialogUtils;
 import com.example.qlquancoffe.utils.SceneSwitcher;
 import javafx.application.Application;
-import javafx.beans.Observable;
-import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 
 public class App extends Application {
@@ -16,10 +13,10 @@ public class App extends Application {
             System.out.println("Khởi động ứng dụng Quản lý Quán Cà Phê");
 
             System.out.println("Kiểm tra kết nối database...");
-            if(!DatabaseConnection.testConnection()) {
+            if (!DatabaseConnection.testConnection()) {
                 System.err.println("❌ KHÔNG THỂ KẾT NỐI DATABASE!");
 
-                SceneSwitcher.showErrorAlert(
+                DialogUtils.showError(
                         "Lỗi kết nối Database",
                         "Không thể kết nối đến database.\n" +
                                 "Vui lòng kiểm tra MySQL và thử lại."
@@ -47,7 +44,7 @@ public class App extends Application {
             System.err.println("❌ LỖI KHỞI ĐỘNG ỨNG DỤNG:");
             e.printStackTrace();
 
-            SceneSwitcher.showErrorAlert(
+            DialogUtils.showError(
                     "Lỗi khởi động",
                     "Đã xảy ra lỗi khi khởi động ứng dụng:\n" + e.getMessage()
             );

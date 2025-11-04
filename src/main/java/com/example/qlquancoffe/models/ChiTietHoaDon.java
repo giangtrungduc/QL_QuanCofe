@@ -4,39 +4,76 @@ import javafx.beans.property.*;
 
 import java.math.BigDecimal;
 
+/**
+ * Model cho bảng chitiethoadon
+ */
 public class ChiTietHoaDon {
+
+    private final IntegerProperty idChiTietHoaDon;
     private final IntegerProperty idHoaDon;
     private final IntegerProperty idSanPham;
+    private final StringProperty tenSanPham;
     private final IntegerProperty soLuong;
     private final ObjectProperty<BigDecimal> donGia;
     private final ObjectProperty<BigDecimal> thanhTien;
+    private final StringProperty ghiChu;
 
-    // Thêm property cho tên sản phẩm (để hiển thị)
-    private final StringProperty tenSanPham;
+    // ==================== CONSTRUCTORS ====================
 
-    // Constructor đầy đủ
-    public ChiTietHoaDon(int idHoaDon, int idSanPham, int soLuong,
-                         BigDecimal donGia, BigDecimal thanhTien) {
+    /**
+     * Constructor đầy đủ (từ DB)
+     */
+    public ChiTietHoaDon(int idChiTietHoaDon, int idHoaDon, int idSanPham,
+                         String tenSanPham, int soLuong, BigDecimal donGia,
+                         BigDecimal thanhTien, String ghiChu) {
+        this.idChiTietHoaDon = new SimpleIntegerProperty(idChiTietHoaDon);
         this.idHoaDon = new SimpleIntegerProperty(idHoaDon);
         this.idSanPham = new SimpleIntegerProperty(idSanPham);
+        this.tenSanPham = new SimpleStringProperty(tenSanPham);
         this.soLuong = new SimpleIntegerProperty(soLuong);
         this.donGia = new SimpleObjectProperty<>(donGia);
         this.thanhTien = new SimpleObjectProperty<>(thanhTien);
-        this.tenSanPham = new SimpleStringProperty("");
+        this.ghiChu = new SimpleStringProperty(ghiChu);
     }
 
-    // Constructor tự tính thành tiền
+    /**
+     * Constructor tạo mới (chưa có ID)
+     */
+    public ChiTietHoaDon(int idHoaDon, int idSanPham, String tenSanPham,
+                         int soLuong, BigDecimal donGia) {
+        this(0, idHoaDon, idSanPham, tenSanPham, soLuong, donGia,
+                donGia.multiply(BigDecimal.valueOf(soLuong)), "");
+    }
+
+    /**
+     * Constructor tự tính thành tiền (legacy)
+     */
     public ChiTietHoaDon(int idHoaDon, int idSanPham, int soLuong, BigDecimal donGia) {
-        this(idHoaDon, idSanPham, soLuong, donGia,
-                donGia.multiply(BigDecimal.valueOf(soLuong)));
+        this(0, idHoaDon, idSanPham, "", soLuong, donGia,
+                donGia.multiply(BigDecimal.valueOf(soLuong)), "");
     }
 
-    // Constructor mặc định
+    /**
+     * Constructor mặc định
+     */
     public ChiTietHoaDon() {
-        this(0, 0, 0, BigDecimal.ZERO, BigDecimal.ZERO);
+        this(0, 0, 0, "", 0, BigDecimal.ZERO, BigDecimal.ZERO, "");
     }
 
     // ==================== GETTERS & SETTERS ====================
+
+    // ID Chi tiết hóa đơn
+    public int getIdChiTietHoaDon() {
+        return idChiTietHoaDon.get();
+    }
+
+    public void setIdChiTietHoaDon(int idChiTietHoaDon) {
+        this.idChiTietHoaDon.set(idChiTietHoaDon);
+    }
+
+    public IntegerProperty idChiTietHoaDonProperty() {
+        return idChiTietHoaDon;
+    }
 
     // ID Hóa đơn
     public int getIdHoaDon() {
@@ -64,6 +101,19 @@ public class ChiTietHoaDon {
         return idSanPham;
     }
 
+    // Tên sản phẩm
+    public String getTenSanPham() {
+        return tenSanPham.get();
+    }
+
+    public void setTenSanPham(String tenSanPham) {
+        this.tenSanPham.set(tenSanPham);
+    }
+
+    public StringProperty tenSanPhamProperty() {
+        return tenSanPham;
+    }
+
     // Số lượng
     public int getSoLuong() {
         return soLuong.get();
@@ -72,7 +122,7 @@ public class ChiTietHoaDon {
     public void setSoLuong(int soLuong) {
         this.soLuong.set(soLuong);
         // Tự động tính lại thành tiền
-        this.thanhTien.set(donGia.get().multiply(BigDecimal.valueOf(soLuong)));
+        recalculateThanhTien();
     }
 
     public IntegerProperty soLuongProperty() {
@@ -87,7 +137,7 @@ public class ChiTietHoaDon {
     public void setDonGia(BigDecimal donGia) {
         this.donGia.set(donGia);
         // Tự động tính lại thành tiền
-        this.thanhTien.set(donGia.multiply(BigDecimal.valueOf(soLuong.get())));
+        recalculateThanhTien();
     }
 
     public ObjectProperty<BigDecimal> donGiaProperty() {
@@ -107,21 +157,67 @@ public class ChiTietHoaDon {
         return thanhTien;
     }
 
-    // Tên sản phẩm (để hiển thị)
-    public String getTenSanPham() {
-        return tenSanPham.get();
+    // Ghi chú
+    public String getGhiChu() {
+        return ghiChu.get();
     }
 
-    public void setTenSanPham(String tenSanPham) {
-        this.tenSanPham.set(tenSanPham);
+    public void setGhiChu(String ghiChu) {
+        this.ghiChu.set(ghiChu);
     }
 
-    public StringProperty tenSanPhamProperty() {
-        return tenSanPham;
+    public StringProperty ghiChuProperty() {
+        return ghiChu;
+    }
+
+    // ==================== HELPER METHODS ====================
+
+    /**
+     * Tính lại thành tiền
+     */
+    private void recalculateThanhTien() {
+        if (donGia.get() != null && soLuong.get() > 0) {
+            BigDecimal newThanhTien = donGia.get().multiply(BigDecimal.valueOf(soLuong.get()));
+            setThanhTien(newThanhTien);
+        }
+    }
+
+    /**
+     * Tăng số lượng
+     */
+    public void increaseQuantity(int amount) {
+        setSoLuong(getSoLuong() + amount);
+    }
+
+    /**
+     * Giảm số lượng
+     */
+    public void decreaseQuantity(int amount) {
+        int newQuantity = getSoLuong() - amount;
+        if (newQuantity > 0) {
+            setSoLuong(newQuantity);
+        }
     }
 
     @Override
     public String toString() {
-        return tenSanPham.get() + " x" + soLuong.get();
+        return String.format("%s x%d = %s ₫",
+                tenSanPham.get(),
+                soLuong.get(),
+                thanhTien.get()
+        );
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        ChiTietHoaDon other = (ChiTietHoaDon) obj;
+        return idChiTietHoaDon.get() == other.idChiTietHoaDon.get();
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(idChiTietHoaDon.get());
     }
 }
