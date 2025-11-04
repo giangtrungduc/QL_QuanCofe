@@ -59,10 +59,10 @@
 
     <!-- ==================== LEFT SIDEBAR ==================== -->
     <left>
-        <VBox fx:id="sidebar" prefWidth="220" spacing="5" style="-fx-background-color: #ecf0f1; -fx-padding: 10;                      -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 2, 0);">
+        <VBox fx:id="sidebar" prefWidth="220" spacing="5" style="-fx-background-color: #ecf0f1; -fx-padding: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 2, 0);">
 
             <!-- MENU HEADER -->
-            <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 10 15; -fx-background-color: #34495e;                          -fx-background-radius: 5;">
+            <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 10 15; -fx-background-color: #34495e; -fx-background-radius: 5;">
                 <Label style="-fx-font-size: 20px;" text="📋" />
                 <Label style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="MENU CHỨC NĂNG" />
             </HBox>
@@ -71,26 +71,28 @@
 
             <!-- ==================== MENU QUẢN LÝ ==================== -->
             <VBox fx:id="menuQuanLy" managed="false" spacing="5" visible="false">
-                <Label style="-fx-text-fill: #7f8c8d; -fx-font-size: 11px;                               -fx-font-weight: bold; -fx-padding: 10 15 5 15;" text="QUẢN LÝ" />
+                <Label style="-fx-text-fill: #7f8c8d; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 10 15 5 15;" text="QUẢN LÝ" />
 
-                <Button fx:id="btnDashboard" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#loadDashboard" style="-fx-background-color: transparent; -fx-text-fill: #2c3e50;                                -fx-font-size: 13px; -fx-padding: 12 15; -fx-cursor: hand;                                -fx-background-radius: 5; -fx-alignment: CENTER_LEFT;" styleClass="menu-button" text="📊  Dashboard" />
+                <Button fx:id="btnDashboardQL" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#loadDashboardQL" style="-fx-background-color: transparent; -fx-text-fill: #2c3e50; -fx-font-size: 13px; -fx-padding: 12 15; -fx-cursor: hand; -fx-background-radius: 5; -fx-alignment: CENTER_LEFT;" styleClass="menu-button" text="📊  Dashboard" />
 
-                <Button fx:id="btnSanPham" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#loadSanPham" style="-fx-background-color: transparent; -fx-text-fill: #2c3e50;                                -fx-font-size: 13px; -fx-padding: 12 15; -fx-cursor: hand;                                -fx-background-radius: 5; -fx-alignment: CENTER_LEFT;" styleClass="menu-button" text="📦  Sản phẩm" />
+                <Button fx:id="btnSanPham" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#loadSanPham" style="-fx-background-color: transparent; -fx-text-fill: #2c3e50; -fx-font-size: 13px; -fx-padding: 12 15; -fx-cursor: hand; -fx-background-radius: 5; -fx-alignment: CENTER_LEFT;" styleClass="menu-button" text="📦  Sản phẩm" />
 
-                <Button fx:id="btnNhanVien" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#loadNhanVien" style="-fx-background-color: transparent; -fx-text-fill: #2c3e50;                                -fx-font-size: 13px; -fx-padding: 12 15; -fx-cursor: hand;                                -fx-background-radius: 5; -fx-alignment: CENTER_LEFT;" styleClass="menu-button" text="👥  Nhân viên" />
+                <Button fx:id="btnNhanVien" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#loadNhanVien" style="-fx-background-color: transparent; -fx-text-fill: #2c3e50; -fx-font-size: 13px; -fx-padding: 12 15; -fx-cursor: hand; -fx-background-radius: 5; -fx-alignment: CENTER_LEFT;" styleClass="menu-button" text="👥  Nhân viên" />
 
-                <Button fx:id="btnDoanhThu" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#loadDoanhThu" style="-fx-background-color: transparent; -fx-text-fill: #2c3e50;                                -fx-font-size: 13px; -fx-padding: 12 15; -fx-cursor: hand;                                -fx-background-radius: 5; -fx-alignment: CENTER_LEFT;" styleClass="menu-button" text="💰  Doanh thu" />
+                <Button fx:id="btnDoanhThu" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#loadDoanhThu" style="-fx-background-color: transparent; -fx-text-fill: #2c3e50; -fx-font-size: 13px; -fx-padding: 12 15; -fx-cursor: hand; -fx-background-radius: 5; -fx-alignment: CENTER_LEFT;" styleClass="menu-button" text="💰  Doanh thu" />
 
-                <Button fx:id="btnLichSuHoaDon" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#loadLichSuHoaDon" style="-fx-background-color: transparent; -fx-text-fill: #2c3e50;                                -fx-font-size: 13px; -fx-padding: 12 15; -fx-cursor: hand;                                -fx-background-radius: 5; -fx-alignment: CENTER_LEFT;" styleClass="menu-button" text="📜  Lịch sử HĐ" />
+                <Button fx:id="btnLichSuHoaDon" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#loadLichSuHoaDon" style="-fx-background-color: transparent; -fx-text-fill: #2c3e50; -fx-font-size: 13px; -fx-padding: 12 15; -fx-cursor: hand; -fx-background-radius: 5; -fx-alignment: CENTER_LEFT;" styleClass="menu-button" text="📜  Lịch sử HĐ" />
             </VBox>
 
             <!-- ==================== MENU NHÂN VIÊN ==================== -->
             <VBox fx:id="menuNhanVien" managed="false" spacing="5" visible="false">
-                <Label style="-fx-text-fill: #7f8c8d; -fx-font-size: 11px;                               -fx-font-weight: bold; -fx-padding: 10 15 5 15;" text="BÁN HÀNG" />
+                <Label style="-fx-text-fill: #7f8c8d; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 10 15 5 15;" text="NHÂN VIÊN" />
 
-                <Button fx:id="btnBanHang" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#loadBanHang" style="-fx-background-color: #27ae60; -fx-text-fill: white;                                -fx-font-size: 13px; -fx-padding: 12 15; -fx-cursor: hand;                                -fx-background-radius: 5; -fx-font-weight: bold; -fx-alignment: CENTER_LEFT;" styleClass="menu-button-primary" text="🛒  Bán hàng" />
+                <Button fx:id="btnDashboardNV" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#loadDashboardNV" style="-fx-background-color: transparent; -fx-text-fill: #2c3e50; -fx-font-size: 13px; -fx-padding: 12 15; -fx-cursor: hand; -fx-background-radius: 5; -fx-alignment: CENTER_LEFT;" styleClass="menu-button" text="📊  Dashboard" />
 
-                <Button fx:id="btnLichSuBan" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#loadLichSuBan" style="-fx-background-color: transparent; -fx-text-fill: #2c3e50;                                -fx-font-size: 13px; -fx-padding: 12 15; -fx-cursor: hand;                                -fx-background-radius: 5; -fx-alignment: CENTER_LEFT;" styleClass="menu-button" text="📝  Lịch sử bán" />
+                <Button fx:id="btnBanHang" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#loadBanHang" style="-fx-background-color: transparent; -fx-text-fill: #2c3e50; -fx-font-size: 13px; -fx-padding: 12 15; -fx-cursor: hand; -fx-background-radius: 5; -fx-font-weight: bold; -fx-alignment: CENTER_LEFT;" styleClass="menu-button" text="🛒  Bán hàng" />
+
+                <Button fx:id="btnLichSuBan" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#loadLichSuBan" style="-fx-background-color: transparent; -fx-text-fill: #2c3e50; -fx-font-size: 13px; -fx-padding: 12 15; -fx-cursor: hand; -fx-background-radius: 5; -fx-alignment: CENTER_LEFT;" styleClass="menu-button" text="📝  Lịch sử bán" />
             </VBox>
 
             <!-- SPACER -->
@@ -99,7 +101,7 @@
             <!-- BOTTOM MENU (Chung cho cả 2) -->
             <Separator />
 
-            <Button fx:id="btnHuongDan" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#showHelp" style="-fx-background-color: transparent; -fx-text-fill: #2c3e50;                            -fx-font-size: 13px; -fx-padding: 12 15; -fx-cursor: hand;                            -fx-background-radius: 5; -fx-alignment: CENTER_LEFT;" styleClass="menu-button" text="❓  Hướng dẫn" />
+            <Button fx:id="btnHuongDan" alignment="CENTER_LEFT" maxWidth="Infinity" onAction="#showHelp" style="-fx-background-color: transparent; -fx-text-fill: #2c3e50; -fx-font-size: 13px; -fx-padding: 12 15; -fx-cursor: hand; -fx-background-radius: 5; -fx-alignment: CENTER_LEFT;" styleClass="menu-button" text="❓  Hướng dẫn" />
 
         </VBox>
     </left>
@@ -118,21 +120,21 @@
                 </VBox>
 
                 <!-- Quick Stats (CHỈ HIỂN THỊ CHO QUẢN LÝ) -->
-                <HBox fx:id="statsContainer" alignment="CENTER" managed="false" spacing="20" visible="false">
+                <HBox fx:id="statsContainerQL" alignment="CENTER" managed="false" spacing="20" visible="false">
 
-                    <VBox alignment="CENTER" spacing="10" style="-fx-background-color: linear-gradient(to bottom, #3498db, #2980b9);                                  -fx-background-radius: 10; -fx-padding: 20; -fx-min-width: 200;">
+                    <VBox alignment="CENTER" spacing="10" style="-fx-background-color: linear-gradient(to bottom, #3498db, #2980b9); -fx-background-radius: 10; -fx-padding: 20; -fx-min-width: 200;">
                         <Label style="-fx-font-size: 30px;" text="💰" />
                         <Label style="-fx-text-fill: white; -fx-font-size: 12px;" text="Doanh thu hôm nay" />
-                        <Label fx:id="lblDoanhThuHomNay" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" text="0 ₫" />
+                        <Label fx:id="lblDoanhThuHomNayQL" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" text="0 ₫" />
                     </VBox>
 
-                    <VBox alignment="CENTER" spacing="10" style="-fx-background-color: linear-gradient(to bottom, #27ae60, #229954);                                  -fx-background-radius: 10; -fx-padding: 20; -fx-min-width: 200;">
+                    <VBox alignment="CENTER" spacing="10" style="-fx-background-color: linear-gradient(to bottom, #27ae60, #229954); -fx-background-radius: 10; -fx-padding: 20; -fx-min-width: 200;">
                         <Label style="-fx-font-size: 30px;" text="🧾" />
                         <Label style="-fx-text-fill: white; -fx-font-size: 12px;" text="Số đơn hàng" />
-                        <Label fx:id="lblSoDonHang" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" text="0 đơn" />
+                        <Label fx:id="lblSoDonHangQL" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" text="0 đơn" />
                     </VBox>
 
-                    <VBox alignment="CENTER" spacing="10" style="-fx-background-color: linear-gradient(to bottom, #e74c3c, #c0392b);                                  -fx-background-radius: 10; -fx-padding: 20; -fx-min-width: 200;">
+                    <VBox alignment="CENTER" spacing="10" style="-fx-background-color: linear-gradient(to bottom, #e74c3c, #c0392b); -fx-background-radius: 10; -fx-padding: 20; -fx-min-width: 200;">
                         <Label style="-fx-font-size: 30px;" text="⚠️" />
                         <Label style="-fx-text-fill: white; -fx-font-size: 12px;" text="Sản phẩm sắp hết" />
                         <Label fx:id="lblSanPhamSapHet" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" text="0 SP" />
@@ -140,19 +142,34 @@
 
                 </HBox>
 
+                <!-- Quick Stats (Chỉ hiển thị cho nhân viên) -->
+                <HBox fx:id="statsContainerNV" alignment="CENTER" managed="false" spacing="20" visible="false">
+                    <VBox alignment="CENTER" spacing="10" style="-fx-background-color: linear-gradient(to bottom, #3498db, #2980b9); -fx-background-radius: 10; -fx-padding: 20; -fx-min-width: 220;">
+                        <Label style="-fx-font-size: 30px;" text="💰" />
+                        <Label style="-fx-text-fill: white; -fx-font-size: 12px;" text="Doanh thu hôm nay" />
+                        <Label fx:id="lblDoanhThuHomNayNV" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" text="0 ₫" />
+                    </VBox>
+
+                    <VBox alignment="CENTER" spacing="10" style="-fx-background-color: linear-gradient(to bottom, #27ae60, #229954); -fx-background-radius: 10; -fx-padding: 20; -fx-min-width: 220;">
+                        <Label style="-fx-font-size: 30px;" text="🧾" />
+                        <Label style="-fx-text-fill: white; -fx-font-size: 12px;" text="Số đơn hàng" />
+                        <Label fx:id="lblSoDonHangNV" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" text="0 đơn" />
+                    </VBox>
+                </HBox>
+
                 <!-- Quick Actions (PHÂN QUYỀN) -->
                 <HBox fx:id="quickActionsQuanLy" alignment="CENTER" managed="false" spacing="15" visible="false">
-                    <Button onAction="#loadSanPham" style="-fx-background-color: #9b59b6; -fx-text-fill: white;                                    -fx-font-size: 14px; -fx-padding: 12 25; -fx-cursor: hand;                                    -fx-background-radius: 5; -fx-font-weight: bold;" text="📦 Quản lý sản phẩm" />
+                    <Button onAction="#loadSanPham" style="-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 12 25; -fx-cursor: hand; -fx-background-radius: 5; -fx-font-weight: bold;" text="📦 Quản lý sản phẩm" />
 
-                    <Button onAction="#loadNhanVien" style="-fx-background-color: #3498db; -fx-text-fill: white;                                    -fx-font-size: 14px; -fx-padding: 12 25; -fx-cursor: hand;                                    -fx-background-radius: 5; -fx-font-weight: bold;" text="👥 Quản lý nhân viên" />
+                    <Button onAction="#loadNhanVien" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 12 25; -fx-cursor: hand; -fx-background-radius: 5; -fx-font-weight: bold;" text="👥 Quản lý nhân viên" />
 
-                    <Button onAction="#loadDoanhThu" style="-fx-background-color: #16a085; -fx-text-fill: white;                                    -fx-font-size: 14px; -fx-padding: 12 25; -fx-cursor: hand;                                    -fx-background-radius: 5; -fx-font-weight: bold;" text="📊 Xem báo cáo" />
+                    <Button onAction="#loadDoanhThu" style="-fx-background-color: #16a085; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 12 25; -fx-cursor: hand; -fx-background-radius: 5; -fx-font-weight: bold;" text="📊 Xem báo cáo" />
                 </HBox>
 
                 <HBox fx:id="quickActionsNhanVien" alignment="CENTER" managed="false" spacing="15" visible="false">
-                    <Button onAction="#loadBanHang" style="-fx-background-color: #27ae60; -fx-text-fill: white;                                    -fx-font-size: 16px; -fx-padding: 15 30; -fx-cursor: hand;                                    -fx-background-radius: 5; -fx-font-weight: bold;" text="🛒 Bắt đầu bán hàng" />
+                    <Button onAction="#loadBanHang" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 15 30; -fx-cursor: hand; -fx-background-radius: 5; -fx-font-weight: bold;" text="🛒 Bắt đầu bán hàng" />
 
-                    <Button onAction="#loadLichSuBan" style="-fx-background-color: #3498db; -fx-text-fill: white;                                    -fx-font-size: 16px; -fx-padding: 15 30; -fx-cursor: hand;                                    -fx-background-radius: 5; -fx-font-weight: bold;" text="📝 Xem lịch sử bán" />
+                    <Button onAction="#loadLichSuBan" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 15 30; -fx-cursor: hand; -fx-background-radius: 5; -fx-font-weight: bold;" text="📝 Xem lịch sử bán" />
                 </HBox>
 
                 <!-- Version info -->

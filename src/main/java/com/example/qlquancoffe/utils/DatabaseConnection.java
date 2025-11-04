@@ -10,28 +10,45 @@ import java.sql.SQLException;
 /**
  * Lớp quản lý kết nối đến MySQL Database
  * Sử dụng HikariCP Connection Pool để tối ưu hiệu suất
+ * Hỗ trợ cả LOCALHOST và CLOUD
  */
 public class DatabaseConnection {
 
-    // ===================== CẤU HÌNH DATABASE =====================
-    private static final String DB_HOST = "@maglev.proxy.rlwy.net";
-    private static final String DB_PORT = "25382";
-    private static final String DB_NAME = "railway";
-    private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "aUKfugtuQBefRjogUvVEyRAARDfbqqts";
+    // ===================== CHỌN MÔI TRƯỜNG =====================
+    // ⚠️ THAY ĐỔI GIÁ TRỊ NÀY ĐỂ CHUYỂN ĐỔI
+    private static final boolean USE_LOCALHOST = true;  // true = localhost, false = cloud
 
-    private static final String DB_URL = String.format(
-            "jdbc:mysql://%s:%s/%s", DB_HOST, DB_PORT, DB_NAME
-    );
+    // ===================== CẤU HÌNH LOCALHOST =====================
+    private static final String LOCAL_HOST = "localhost";
+    private static final String LOCAL_PORT = "3306";
+    private static final String LOCAL_DB_NAME = "qlquancoffe"; // Tên database của bạn
+    private static final String LOCAL_USER = "root";
+    private static final String LOCAL_PASSWORD = "duc123"; // Mật khẩu MySQL local của bạn
+
+    // ===================== CẤU HÌNH CLOUD (Railway) =====================
+    private static final String CLOUD_HOST = "maglev.proxy.rlwy.net";
+    private static final String CLOUD_PORT = "25382";
+    private static final String CLOUD_DB_NAME = "railway";
+    private static final String CLOUD_USER = "root";
+    private static final String CLOUD_PASSWORD = "aUKfugtuQBefRjogUvVEyRAARDfbqqts";
+
+    // ===================== URL KẾT NỐI (TỰ ĐỘNG) =====================
+    private static final String DB_URL = USE_LOCALHOST
+            ? String.format("jdbc:mysql://%s:%s/%s", LOCAL_HOST, LOCAL_PORT, LOCAL_DB_NAME)
+            : String.format("jdbc:mysql://%s:%s/%s", CLOUD_HOST, CLOUD_PORT, CLOUD_DB_NAME);
+
+    private static final String DB_USER = USE_LOCALHOST ? LOCAL_USER : CLOUD_USER;
+    private static final String DB_PASSWORD = USE_LOCALHOST ? LOCAL_PASSWORD : CLOUD_PASSWORD;
 
     // ===================== HIKARICP DATASOURCE =====================
     private static HikariDataSource dataSource;
 
-    // Khối static - chạy 1 lần khi class được load
     static {
         try {
             setupDataSource();
             System.out.println("✅ HikariCP Connection Pool đã được khởi tạo");
+            System.out.println("🌍 Môi trường: " + (USE_LOCALHOST ? "LOCALHOST" : "CLOUD"));
+            System.out.println("📡 Kết nối tới: " + DB_URL);
         } catch (Exception e) {
             System.err.println("❌ Lỗi khởi tạo Connection Pool: " + e.getMessage());
             e.printStackTrace();
@@ -51,11 +68,21 @@ public class DatabaseConnection {
         config.setDriverClassName("com.mysql.cj.jdbc.Driver");
 
         // ===== CẤU HÌNH CONNECTION POOL =====
-        config.setMaximumPoolSize(10);           // Tối đa 10 connections
-        config.setMinimumIdle(2);                // Tối thiểu 2 connections sẵn sàng
-        config.setConnectionTimeout(30000);      // Timeout 30s khi lấy connection
-        config.setIdleTimeout(600000);           // Connection idle 10 phút thì đóng
-        config.setMaxLifetime(1800000);          // Connection tồn tại tối đa 30 phút
+        if (USE_LOCALHOST) {
+            // Localhost: Ít connections, timeout ngắn
+            config.setMaximumPoolSize(5);
+            config.setMinimumIdle(2);
+            config.setConnectionTimeout(10000);      // 10s
+            config.setIdleTimeout(300000);           // 5 phút
+            config.setMaxLifetime(600000);           // 10 phút
+        } else {
+            // Cloud: Nhiều connections hơn, timeout dài hơn
+            config.setMaximumPoolSize(10);
+            config.setMinimumIdle(2);
+            config.setConnectionTimeout(30000);      // 30s
+            config.setIdleTimeout(600000);           // 10 phút
+            config.setMaxLifetime(1800000);          // 30 phút
+        }
 
         // ===== CẤU HÌNH MYSQL =====
         config.addDataSourceProperty("cachePrepStmts", "true");
@@ -76,20 +103,17 @@ public class DatabaseConnection {
         config.addDataSourceProperty("useSSL", "false");
         config.addDataSourceProperty("allowPublicKeyRetrieval", "true");
 
-        // ===== TÊN POOL (để dễ debug) =====
-        config.setPoolName("QLQuanCoffee-Pool");
+        // ===== TÊN POOL =====
+        config.setPoolName("QLQuanCoffee-Pool-" + (USE_LOCALHOST ? "LOCAL" : "CLOUD"));
 
         // ===== HEALTH CHECK =====
         config.setConnectionTestQuery("SELECT 1");
 
-        // Tạo DataSource
         dataSource = new HikariDataSource(config);
     }
 
     /**
      * Lấy connection từ pool
-     * @return Connection object
-     * @throws SQLException nếu không lấy được connection
      */
     public static Connection getConnection() throws SQLException {
         if (dataSource == null) {
@@ -109,7 +133,7 @@ public class DatabaseConnection {
     }
 
     /**
-     * Đóng connection pool (gọi khi tắt ứng dụng)
+     * Đóng connection pool
      */
     public static void closeDataSource() {
         if (dataSource != null && !dataSource.isClosed()) {
@@ -119,8 +143,7 @@ public class DatabaseConnection {
     }
 
     /**
-     * Kiểm tra connection pool có hoạt động không
-     * @return true nếu pool OK
+     * Kiểm tra connection
      */
     public static boolean testConnection() {
         try (Connection conn = getConnection()) {
@@ -132,11 +155,12 @@ public class DatabaseConnection {
     }
 
     /**
-     * In thông tin về Connection Pool
+     * In thông tin Pool
      */
     public static void printPoolStats() {
         if (dataSource != null) {
             System.out.println("\n📊 THỐNG KÊ CONNECTION POOL:");
+            System.out.println("   Môi trường: " + (USE_LOCALHOST ? "LOCALHOST" : "CLOUD"));
             System.out.println("   Active Connections: " +
                     dataSource.getHikariPoolMXBean().getActiveConnections());
             System.out.println("   Idle Connections: " +
@@ -154,13 +178,13 @@ public class DatabaseConnection {
     public static void printDatabaseInfo() {
         try (Connection conn = getConnection()) {
             System.out.println("\n📊 THÔNG TIN DATABASE:");
+            System.out.println("   Môi trường: " + (USE_LOCALHOST ? "🏠 LOCALHOST" : "☁️ CLOUD"));
             System.out.println("   Database: " + conn.getCatalog());
             System.out.println("   URL: " + conn.getMetaData().getURL());
             System.out.println("   User: " + conn.getMetaData().getUserName());
             System.out.println("   Driver: " + conn.getMetaData().getDriverName());
             System.out.println("   Driver Version: " + conn.getMetaData().getDriverVersion());
 
-            // Lấy danh sách bảng
             System.out.println("\n📋 DANH SÁCH BẢNG:");
             ResultSet rs = conn.getMetaData().getTables(
                     null, null, "%", new String[]{"TABLE"}
@@ -176,26 +200,24 @@ public class DatabaseConnection {
         }
     }
 
-    /**
-     * Lấy số lượng connections đang active
-     */
     public static int getActiveConnections() {
         return dataSource != null ?
                 dataSource.getHikariPoolMXBean().getActiveConnections() : 0;
     }
 
-    /**
-     * Lấy số lượng connections đang idle
-     */
     public static int getIdleConnections() {
         return dataSource != null ?
                 dataSource.getHikariPoolMXBean().getIdleConnections() : 0;
     }
 
-    /**
-     * Kiểm tra pool có đang hoạt động không
-     */
     public static boolean isPoolRunning() {
         return dataSource != null && !dataSource.isClosed();
+    }
+
+    /**
+     * Kiểm tra đang dùng môi trường nào
+     */
+    public static String getCurrentEnvironment() {
+        return USE_LOCALHOST ? "LOCALHOST" : "CLOUD";
     }
 }

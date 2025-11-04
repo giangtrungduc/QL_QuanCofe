@@ -110,6 +110,42 @@ public class SanPhamDAO {
     }
 
     /**
+     * Tìm kiếm sản phẩm theo tên
+     */
+    public ObservableList<SanPham> searchSanPham(String keyword, int idDanhMuc) {
+        ObservableList<SanPham> list = FXCollections.observableArrayList();
+
+        String sql = """
+        SELECT s.*, d.ten_danhmuc 
+        FROM sanpham s 
+        LEFT JOIN danhmuc d ON s.id_danhmuc = d.id_danhmuc
+        WHERE s.ten_sanpham LIKE ? AND s.id_danhmuc = ?
+        ORDER BY s.ten_sanpham
+    """;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            // Gán giá trị cho các dấu ? trong câu SQL
+            pstmt.setString(1, "%" + keyword + "%"); // từ khóa tìm kiếm
+            pstmt.setInt(2, idDanhMuc);              // chỉ tìm trong danh mục cụ thể
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                SanPham sp = extractSanPhamFromResultSet(rs);
+                sp.setTenDanhMuc(rs.getString("ten_danhmuc"));
+                list.add(sp);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("❌ Lỗi tìm kiếm sản phẩm: " + e.getMessage());
+        }
+
+        return list;
+    }
+
+    /**
      * Lấy sản phẩm còn hàng
      */
     public ObservableList<SanPham> getSanPhamConHang() {
@@ -204,6 +240,31 @@ public class SanPhamDAO {
         }
 
         return list;
+    }
+
+    /**
+     * Kiểm tra tên sản phẩm trước khi thêm
+     * @param tenSanPham
+     * @return
+     */
+    public boolean isTenSanPhamTonTai(String tenSanPham) {
+        String sql = "SELECT COUNT(*) FROM sanpham WHERE ten_sanpham = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, tenSanPham);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // true nếu tồn tại
+            }
+
+        } catch (SQLException e) {
+            System.err.println("❌ Lỗi khi kiểm tra tên sản phẩm: " + e.getMessage());
+        }
+
+        return false;
     }
 
     /**

@@ -16,6 +16,8 @@ module com.example.qlquancoffe {
 
     opens com.example.qlquancoffe to javafx.fxml;
     opens com.example.qlquancoffe.controllers to javafx.fxml;
+    opens com.example.qlquancoffe.controllers.quanly to javafx.fxml;
+    opens com.example.qlquancoffe.controllers.nhanvien to javafx.fxml;
     opens com.example.qlquancoffe.models to javafx.fxml;
     exports com.example.qlquancoffe;
     exports com.example.qlquancoffe.controllers;

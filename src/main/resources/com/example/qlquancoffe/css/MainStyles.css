@@ -134,21 +134,6 @@
     -fx-background-color: #2980b9;
 }
 
-/* Menu Button Primary (Bán hàng - cho nhân viên) */
-.menu-button-primary {
-    -fx-background-color: #27ae60;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-}
-
-.menu-button-primary:hover {
-    -fx-background-color: #229954;
-}
-
-.menu-button-primary:pressed {
-    -fx-background-color: #1e8449;
-}
-
 /* ==================== CONTENT AREA ==================== */
 .content-area {
     -fx-background-color: #ffffff;

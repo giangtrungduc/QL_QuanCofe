@@ -2,6 +2,7 @@ package com.example.qlquancoffe.controllers;
 
 import com.example.qlquancoffe.dao.HoaDonDAO;
 import com.example.qlquancoffe.dao.SanPhamDAO;
+import com.example.qlquancoffe.dao.TaiKhoanDAO;
 import com.example.qlquancoffe.models.TaiKhoan;
 import com.example.qlquancoffe.utils.CurrencyUtil;
 import com.example.qlquancoffe.utils.SceneSwitcher;
@@ -44,7 +45,8 @@ public class MainController {
     @FXML private VBox menuNhanVien;    // Menu dành cho Nhân viên
 
     // Menu buttons - Quản lý
-    @FXML private Button btnDashboard;
+    @FXML private Button btnDashboardQL;
+    @FXML private Button btnDashboardNV;
     @FXML private Button btnSanPham;
     @FXML private Button btnNhanVien;
     @FXML private Button btnDoanhThu;
@@ -62,9 +64,12 @@ public class MainController {
     @FXML private VBox defaultContent;
 
     @FXML private Label lblWelcome;
-    @FXML private HBox statsContainer;          // Stats chỉ cho Quản lý
-    @FXML private Label lblDoanhThuHomNay;
-    @FXML private Label lblSoDonHang;
+    @FXML private HBox statsContainerQL;
+    @FXML private HBox statsContainerNV;
+    @FXML private Label lblDoanhThuHomNayQL;
+    @FXML private Label lblDoanhThuHomNayNV;
+    @FXML private Label lblSoDonHangQL;
+    @FXML private Label lblSoDonHangNV;
     @FXML private Label lblSanPhamSapHet;
 
     @FXML private HBox quickActionsQuanLy;     // Quick actions cho Quản lý
@@ -103,7 +108,7 @@ public class MainController {
 
         // Load stats nếu là Quản lý
         if (currentUser.getVaiTro() == TaiKhoan.VaiTro.QuanLy) {
-            loadDashboardStats();
+            loadDashboardStatsQL();
         }
 
         System.out.println("✅ MainController đã sẵn sàng!");
@@ -148,22 +153,22 @@ public class MainController {
             menuNhanVien.setManaged(false);
 
             // Hiển thị stats và quick actions
-            statsContainer.setVisible(true);
-            statsContainer.setManaged(true);
+            statsContainerQL.setVisible(true);
+            statsContainerQL.setManaged(true);
             quickActionsQuanLy.setVisible(true);
             quickActionsQuanLy.setManaged(true);
             quickActionsNhanVien.setVisible(false);
             quickActionsNhanVien.setManaged(false);
 
             // Thêm buttons vào list
-            menuButtons.add(btnDashboard);
+            menuButtons.add(btnDashboardQL);
             menuButtons.add(btnSanPham);
             menuButtons.add(btnNhanVien);
             menuButtons.add(btnDoanhThu);
             menuButtons.add(btnLichSuHoaDon);
 
             // Set Dashboard làm active mặc định
-            setActiveButton(btnDashboard);
+            setActiveButton(btnDashboardQL);
 
         } else {
             // ==================== NHÂN VIÊN ====================
@@ -178,19 +183,20 @@ public class MainController {
             menuNhanVien.setManaged(true);
 
             // Ẩn stats, hiển thị quick actions nhân viên
-            statsContainer.setVisible(false);
-            statsContainer.setManaged(false);
+            statsContainerNV.setVisible(true);
+            statsContainerNV.setManaged(true);
             quickActionsQuanLy.setVisible(false);
             quickActionsQuanLy.setManaged(false);
             quickActionsNhanVien.setVisible(true);
             quickActionsNhanVien.setManaged(true);
 
             // Thêm buttons vào list
+            menuButtons.add(btnDashboardNV);
             menuButtons.add(btnBanHang);
             menuButtons.add(btnLichSuBan);
 
-            // Set Bán hàng làm active mặc định
-            setActiveButton(btnBanHang);
+            // Set Dashboard làm active mặc định
+            setActiveButton(btnDashboardNV);
         }
 
         // Menu chung cho cả 2
@@ -227,9 +233,9 @@ public class MainController {
     }
 
     /**
-     * Load thống kê Dashboard (chỉ cho Quản lý)
+     * Load thống kê Dashboard (Quản lý)
      */
-    private void loadDashboardStats() {
+    private void loadDashboardStatsQL() {
         new Thread(() -> {
             try {
                 HoaDonDAO hoaDonDAO = new HoaDonDAO();
@@ -240,24 +246,46 @@ public class MainController {
                 int sanPhamSapHet = sanPhamDAO.getSanPhamSapHet(10).size();
 
                 Platform.runLater(() -> {
-                    lblDoanhThuHomNay.setText(CurrencyUtil.formatVND(doanhThu));
-                    lblSoDonHang.setText(soDon + " đơn");
+                    lblDoanhThuHomNayQL.setText(CurrencyUtil.formatVND(doanhThu));
+                    lblSoDonHangQL.setText(soDon + " đơn");
                     lblSanPhamSapHet.setText(sanPhamSapHet + " SP");
                 });
 
             } catch (Exception e) {
-                System.err.println("❌ Lỗi load thống kê: " + e.getMessage());
+                System.err.println("Lỗi load thống kê: " + e.getMessage());
             }
         }).start();
     }
 
+    /**
+     * Load Thống kê Dashboard (Nhân viên)
+     */
+    private void loadDashboardStatsNV(){
+        new Thread(() -> {
+            try {
+                HoaDonDAO hoaDonDAO = new HoaDonDAO();
+                SanPhamDAO sanPhamDAO = new SanPhamDAO();
+
+                BigDecimal doanhThu = hoaDonDAO.getTongDoanhThuNhanVien(currentUser.getIdNhanVien(), LocalDate.now());
+                int soHoaDon = hoaDonDAO.countHoaDonNhanVien(currentUser.getIdNhanVien(), LocalDate.now());
+                Platform.runLater(() -> {
+                    lblDoanhThuHomNayNV.setText(CurrencyUtil.formatVND(doanhThu));
+                    lblSoDonHangNV.setText(soHoaDon + "đơn");
+                });
+            } catch (Exception e) {
+                System.err.println("Lỗi load thống kê: " + e.getMessage());
+            }
+        }).start();
+    }
+
+
     // ==================== MENU ACTIONS - QUẢN LÝ ====================
 
     @FXML
-    private void loadDashboard() {
-        setActiveButton(btnDashboard);
+    private void loadDashboardQL() {
+        setActiveButton(btnDashboardQL);
         showDefaultContent();
-        loadDashboardStats();
+        loadDashboardStatsQL();
     }
 
     @FXML
@@ -285,6 +313,13 @@ public class MainController {
     }
 
     // ==================== MENU ACTIONS - NHÂN VIÊN ====================
+
+    @FXML
+    private void loadDashboardNV(){
+        setActiveButton(btnDashboardNV);
+        showDefaultContent();
+        loadDashboardStatsNV();
+    }
 
     @FXML
     private void loadBanHang() {
@@ -404,7 +439,7 @@ public class MainController {
                 "-fx-font-size: 14px; -fx-padding: 10 20; -fx-cursor: hand;");
 
         if (currentUser.getVaiTro() == TaiKhoan.VaiTro.QuanLy) {
-            btnBack.setOnAction(e -> loadDashboard());
+            btnBack.setOnAction(e -> loadDashboardQL());
         } else {
             btnBack.setText("🛒 Về Bán hàng");
             btnBack.setOnAction(e -> loadBanHang());
@@ -427,7 +462,7 @@ public class MainController {
                     .replace("-fx-text-fill: white;", "-fx-text-fill: #2c3e50;"));
         }
 
-        if (button != null && button != btnBanHang) { // btnBanHang có style riêng
+        if (button != null) {
             String currentStyle = button.getStyle();
             if (!currentStyle.contains("-fx-background-color: #27ae60")) {
                 button.setStyle(currentStyle + "-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;");
