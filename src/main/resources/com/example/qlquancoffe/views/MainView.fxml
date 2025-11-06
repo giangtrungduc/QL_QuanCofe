@@ -51,17 +51,17 @@
             <Separator styleClass="menu-separator" />
             <VBox fx:id="menuQuanLy" managed="false" styleClass="menu-section" visible="false">
                 <Label styleClass="menu-section-title" text="QUẢN LÝ" />
-                <Button fx:id="btnDashboardQL" onAction="#loadDashboardQL" styleClass="menu-button" text="📊  Dashboard" />
-                <Button fx:id="btnSanPham" onAction="#loadSanPham" styleClass="menu-button" text="📦  Sản phẩm" />
-                <Button fx:id="btnNhanVien" onAction="#loadNhanVien" styleClass="menu-button" text="👥  Nhân viên" />
-                <Button fx:id="btnDoanhThu" onAction="#loadDoanhThu" styleClass="menu-button" text="💰  Doanh thu" />
-                <Button fx:id="btnLichSuHoaDon" onAction="#loadLichSuHoaDon" styleClass="menu-button" text="📜  Lịch sử HĐ" />
+                <Button fx:id="btnDashboardQL" onAction="#loadDashboardQL" styleClass="menu-button" text="📊 Dashboard" />
+                <Button fx:id="btnSanPham" onAction="#loadSanPham" styleClass="menu-button" text="📦 Sản phẩm" />
+                <Button fx:id="btnNhanVien" onAction="#loadNhanVien" styleClass="menu-button" text="👥 Nhân viên" />
+                <Button fx:id="btnDoanhThu" onAction="#loadDoanhThu" styleClass="menu-button" text="💰 Doanh thu" />
+                <Button fx:id="btnLichSuHoaDon" onAction="#loadLichSuHoaDon" styleClass="menu-button" text="📜 Lịch sử HĐ" />
             </VBox>
             <VBox fx:id="menuNhanVien" managed="false" styleClass="menu-section" visible="false">
                 <Label styleClass="menu-section-title" text="NHÂN VIÊN" />
-                <Button fx:id="btnDashboardNV" onAction="#loadDashboardNV" styleClass="menu-button" text="📊  Dashboard" />
-                <Button fx:id="btnBanHang" onAction="#loadBanHang" styleClass="menu-button" text="🛒  Bán hàng" />
-                <Button fx:id="btnLichSuBan" onAction="#loadLichSuBan" styleClass="menu-button" text="📝  Lịch sử bán" />
+                <Button fx:id="btnDashboardNV" onAction="#loadDashboardNV" styleClass="menu-button" text="📊 Dashboard" />
+                <Button fx:id="btnBanHang" onAction="#loadBanHang" styleClass="menu-button" text="🛒 Bán hàng" />
+                <Button fx:id="btnLichSuBan" onAction="#loadLichSuBan" styleClass="menu-button" text="📝 Lịch sử bán" />
             </VBox>
             <Region VBox.vgrow="ALWAYS" />
             <Separator />
@@ -80,12 +80,10 @@
 
                 <HBox fx:id="statsContainerQL" managed="false" styleClass="stats-container" visible="false">
                     <VBox styleClass="stat-card, stat-card-blue">
-                        <Label styleClass="stat-icon" text="💰" />
                         <Label styleClass="stat-label" text="Doanh thu hôm nay" />
                         <Label fx:id="lblDoanhThuHomNayQL" styleClass="stat-value" text="0 ₫" />
                     </VBox>
                     <VBox styleClass="stat-card, stat-card-green">
-                        <Label styleClass="stat-icon" text="🧾" />
                         <Label styleClass="stat-label" text="Số đơn hàng" />
                         <Label fx:id="lblSoDonHangQL" styleClass="stat-value" text="0 đơn" />
                     </VBox>
@@ -99,12 +97,10 @@
 
                 <HBox fx:id="statsContainerNV" managed="false" styleClass="stats-container" visible="false">
                     <VBox styleClass="stat-card, stat-card-blue">
-                        <Label styleClass="stat-icon" text="💰" />
                         <Label styleClass="stat-label" text="Doanh thu hôm nay" />
                         <Label fx:id="lblDoanhThuHomNayNV" styleClass="stat-value" text="0 ₫" />
                     </VBox>
                     <VBox styleClass="stat-card, stat-card-green">
-                        <Label styleClass="stat-icon" text="🧾" />
                         <Label styleClass="stat-label" text="Số đơn hàng" />
                         <Label fx:id="lblSoDonHangNV" styleClass="stat-value" text="0 đơn" />
                     </VBox>

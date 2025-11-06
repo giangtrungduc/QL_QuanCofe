@@ -12,14 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BaoCaoDAO {
-
     /**
-     * Lấy dữ liệu báo cáo đã nhóm theo ngày
+     * Lấy báo cáo doanh thu trong khoảng thời gian, CÓ LỌC THEO DANH MỤC
+     * @param idDanhMuc 0 nếu muốn lấy tất cả
      */
-    // ✅ SỬA: Kiểu trả về
-    public List<BaoCaoData> getBaoCaoNgay(LocalDate date) {
+    public List<BaoCaoData> getBaoCao(LocalDate fromDate, LocalDate toDate, int idDanhMuc) {
         List<BaoCaoData> results = new ArrayList<>();
-        String sql = """
+
+        StringBuilder sql = new StringBuilder("""
             SELECT 
                 d.ten_danhmuc, 
                 ct.ten_sanpham, 
@@ -31,55 +31,26 @@ public class BaoCaoDAO {
             JOIN danhmuc d ON sp.id_danhmuc = d.id_danhmuc
             WHERE 
                 h.trang_thai = 'PAID' 
-                AND DATE(h.ngay_thanh_toan) = ?
-            GROUP BY d.ten_danhmuc, ct.ten_sanpham
-            ORDER BY d.ten_danhmuc, tong_thanh_tien DESC
-        """;
+                AND DATE(h.ngay_thanh_toan) BETWEEN ? AND ?
+        """);
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setDate(1, java.sql.Date.valueOf(date));
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                results.add(new BaoCaoData(rs)); // ✅ SỬA: Dùng constructor mới
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        // Nếu có chọn danh mục cụ thể
+        if (idDanhMuc > 0) {
+            sql.append(" AND d.id_danhmuc = ? ");
         }
-        return results;
-    }
 
-    /**
-     * Lấy dữ liệu báo cáo đã nhóm theo tháng
-     */
-    // ✅ SỬA: Kiểu trả về
-    public List<BaoCaoData> getBaoCaoThang(int year, int month) {
-        List<BaoCaoData> results = new ArrayList<>();
-        String sql = """
-            SELECT 
-                d.ten_danhmuc, 
-                ct.ten_sanpham, 
-                SUM(ct.so_luong) as tong_so_luong, 
-                SUM(ct.thanh_tien) as tong_thanh_tien
-            FROM chitiethoadon ct
-            JOIN hoadon h ON ct.id_hoadon = h.id_hoadon
-            JOIN sanpham sp ON ct.id_sanpham = sp.id_sanpham
-            JOIN danhmuc d ON sp.id_danhmuc = d.id_danhmuc
-            WHERE 
-                h.trang_thai = 'PAID' 
-                AND YEAR(h.ngay_thanh_toan) = ?
-                AND MONTH(h.ngay_thanh_toan) = ?
-            GROUP BY d.ten_danhmuc, ct.ten_sanpham
-            ORDER BY d.ten_danhmuc, tong_thanh_tien DESC
-        """;
+        sql.append(" GROUP BY d.ten_danhmuc, ct.ten_sanpham ORDER BY d.ten_danhmuc, tong_thanh_tien DESC");
 
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
 
-            pstmt.setInt(1, year);
-            pstmt.setInt(2, month);
+            pstmt.setDate(1, java.sql.Date.valueOf(fromDate));
+            pstmt.setDate(2, java.sql.Date.valueOf(toDate));
+
+            if (idDanhMuc > 0) {
+                pstmt.setInt(3, idDanhMuc);
+            }
+
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
@@ -94,7 +65,6 @@ public class BaoCaoDAO {
     /**
      * Lấy Top 3 sản phẩm bán chạy nhất theo tháng
      */
-    // ✅ SỬA: Kiểu trả về
     public List<BaoCaoData> getTop3SanPham(int year, int month) {
         List<BaoCaoData> results = new ArrayList<>();
         String sql = """

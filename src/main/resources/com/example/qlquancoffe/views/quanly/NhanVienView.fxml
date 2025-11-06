@@ -18,11 +18,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="650.0" prefWidth="1150.0"
-            stylesheets="@../../css/quanly/SanPhamStyles.css"
-            xmlns="http://javafx.com/javafx/21.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.qlquancoffe.controllers.quanly.NhanVienController">
+<BorderPane prefHeight="650.0" prefWidth="1150.0" stylesheets="@../../css/quanly/SanPhamStyles.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.qlquancoffe.controllers.quanly.NhanVienController">
 
     <top>
         <VBox styleClass="view-header-container">
@@ -41,7 +37,7 @@
     <center>
         <SplitPane dividerPositions="0.65" styleClass="main-split-pane">
 
-            <VBox styleClass="master-pane" spacing="10.0">
+            <VBox spacing="10.0" styleClass="master-pane">
                 <padding>
                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                 </padding>
@@ -102,11 +98,11 @@
                 <VBox spacing="10.0">
                     <HBox spacing="10.0" styleClass="form-actions">
                         <Button fx:id="btnThem" maxWidth="Infinity" onAction="#handleThem" styleClass="btn-primary" text="➕ Thêm" HBox.hgrow="ALWAYS" />
-                        <Button fx:id="btnSua" disable="true" maxWidth="Infinity" onAction="#handleSua" styleClass="btn-warning" text="✏️ Sửa" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnSua" disable="true" maxWidth="Infinity" onAction="#handleSua" styleClass="btn-warning" text="✏ Sửa" HBox.hgrow="ALWAYS" />
                     </HBox>
                     <HBox spacing="10.0" styleClass="form-actions">
-                        <Button fx:id="btnXoa" disable="true" maxWidth="Infinity" onAction="#handleXoa" styleClass="btn-danger" text="🗑️ Xóa" HBox.hgrow="ALWAYS" />
-                        <Button fx:id="btnLamMoi" maxWidth="Infinity" onAction="#handleLamMoi" styleClass="btn-info" text="🔄 Làm mới" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnXoa" disable="true" maxWidth="Infinity" onAction="#handleXoa" styleClass="btn-danger" text="🗑  Xóa" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnLamMoi" maxWidth="Infinity" onAction="#handleLamMoi" styleClass="btn-refresh" text="🔄 Làm mới" HBox.hgrow="ALWAYS" />
                     </HBox>
                 </VBox>
             </VBox>

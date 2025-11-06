@@ -1,92 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="650.0" prefWidth="1150.0"
-            stylesheets="@../../css/quanly/BaoCaoStyles.css"
-            xmlns="http://javafx.com/javafx/17"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.qlquancoffe.controllers.quanly.BaoCaoController">
+<BorderPane prefHeight="650.0" prefWidth="1150.0" stylesheets="@../../css/quanly/BaoCaoStyles.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.qlquancoffe.controllers.quanly.BaoCaoController">
 
     <top>
         <HBox styleClass="report-header">
             <children>
-                <Label text="📈 DOANH THU" styleClass="title" />
+                <Label styleClass="title" text="📈 DOANH THU" />
                 <Region HBox.hgrow="ALWAYS" />
-                <Label text="Ngày:" />
-                <DatePicker fx:id="dpNgay" onAction="#onChangeNgay" prefWidth="150.0" />
-                <Label text="Tháng:" />
-                <DatePicker fx:id="dpThang" onAction="#onChangeThang" prefWidth="150.0" />
+
+                <Label text="Từ ngày:" />
+                <DatePicker fx:id="dpTuNgay" prefWidth="130.0" />
+                <Label text="Đến ngày:" />
+                <DatePicker fx:id="dpDenNgay" prefWidth="130.0" />
+                <Label text="Danh mục:" />
+                <ComboBox fx:id="cboDanhMuc" prefWidth="150.0" />
+                <Button onAction="#handleXemBaoCao" style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" text="Xem báo cáo" />
             </children>
         </HBox>
     </top>
 
     <center>
         <VBox style="-fx-padding: 15;">
-            <TabPane fx:id="tabPane" styleClass="report-tab-pane" tabClosingPolicy="UNAVAILABLE">
-                <tabs>
-                    <Tab text="Doanh thu theo ngày" fx:id="tabNgay">
-                        <VBox styleClass="tab-content-box">
-                            <HBox alignment="CENTER_LEFT" spacing="12">
-                                <Label text="Chi tiết NGÀY (Danh mục → Sản phẩm)" styleClass="content-title" />
-                                <Region HBox.hgrow="ALWAYS" />
-                                <Label fx:id="lblTongSoLuongNgay" styleClass="summary-label" />
-                                <Separator orientation="VERTICAL" prefHeight="16" />
-                                <Label fx:id="lblTongTienNgay" styleClass="summary-total" />
-                            </HBox>
-                            <TreeTableView fx:id="treeNgay" showRoot="false" VBox.vgrow="ALWAYS">
-                                <columns>
-                                    <TreeTableColumn fx:id="colTenNgay" text="Danh mục / Sản phẩm" prefWidth="420" />
-                                    <TreeTableColumn fx:id="colSoLuongNgay" text="Số lượng" prefWidth="110" styleClass="col-number" />
-                                    <TreeTableColumn fx:id="colDonGiaNgay" text="Đơn giá TB (đ)" prefWidth="150" styleClass="col-money" />
-                                    <TreeTableColumn fx:id="colDoanhThuNgay" text="Thành tiền (đ)" prefWidth="190" styleClass="col-money" />
-                                </columns>
-                                <columnResizePolicy>
-                                    <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                </columnResizePolicy>
-                            </TreeTableView>
-                            <Label text="* Hàng đậm là tổng theo danh mục." styleClass="footnote-label" />
-                        </VBox>
-                    </Tab>
+            <VBox styleClass="tab-content-box" VBox.vgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label styleClass="content-title" text="Chi tiết doanh thu (Sản phẩm)" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Label fx:id="lblTongSoLuong" styleClass="summary-label" text="Tổng SL: 0" />
+                    <Separator orientation="VERTICAL" prefHeight="16" />
+                    <Label fx:id="lblTongTien" styleClass="summary-total" text="Tổng tiền: 0 ₫" />
+                </HBox>
 
-                    <Tab text="Doanh thu theo tháng" fx:id="tabThang">
-                        <VBox styleClass="tab-content-box">
-                            <HBox alignment="CENTER_LEFT" spacing="12">
-                                <Label text="Chi tiết THÁNG (Danh mục → Sản phẩm)" styleClass="content-title" />
-                                <Region HBox.hgrow="ALWAYS" />
-                                <Label fx:id="lblTongSoLuongThang" styleClass="summary-label" />
-                                <Separator orientation="VERTICAL" prefHeight="16" />
-                                <Label fx:id="lblTongTienThang" styleClass="summary-total" />
-                            </HBox>
-                            <TreeTableView fx:id="treeThang" showRoot="false" VBox.vgrow="ALWAYS">
-                                <columns>
-                                    <TreeTableColumn fx:id="colTenThang" text="Danh mục / Sản phẩm" prefWidth="420" />
-                                    <TreeTableColumn fx:id="colSoLuongThang" text="Số lượng" prefWidth="110" styleClass="col-number" />
-                                    <TreeTableColumn fx:id="colDonGiaThang" text="Đơn giá TB (đ)" prefWidth="150" styleClass="col-money" />
-                                    <TreeTableColumn fx:id="colDoanhThuThang" text="Thành tiền (đ)" prefWidth="190" styleClass="col-money" />
-                                </columns>
-                                <columnResizePolicy>
-                                    <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                </columnResizePolicy>
-                            </TreeTableView>
-                            <Label text="* Hàng đậm là tổng theo danh mục." styleClass="footnote-label" />
-                        </VBox>
-                    </Tab>
-                </tabs>
-            </TabPane>
+                <TreeTableView fx:id="treeBaoCao" showRoot="false" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TreeTableColumn fx:id="colTen" prefWidth="420" text="Sản phẩm" />
+                        <TreeTableColumn fx:id="colSoLuong" prefWidth="110" styleClass="col-number" text="Số lượng" />
+                        <TreeTableColumn fx:id="colDonGia" prefWidth="150" styleClass="col-money" text="Đơn giá TB (đ)" />
+                        <TreeTableColumn fx:id="colDoanhThu" prefWidth="190" styleClass="col-money" text="Thành tiền (đ)" />
+                    </columns>
+                    <columnResizePolicy>
+                        <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
+                </TreeTableView>
+            </VBox>
         </VBox>
     </center>
 
     <right>
-        <VBox fx:id="topProductsPane" managed="false" styleClass="top-products-pane" visible="false">
+        <VBox fx:id="topProductsPane" styleClass="top-products-pane">
             <padding>
                 <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
             </padding>
             <HBox alignment="CENTER_LEFT" styleClass="top-products-header">
-                <Label text="🏆" styleClass="header-icon" />
-                <Label text="TOP BÁN CHẠY" styleClass="top-products-title" />
+                <Label styleClass="header-icon" text="🏆" />
+                <Label styleClass="top-products-title" text="TOP BÁN CHẠY THEO THÁNG" />
             </HBox>
             <Separator />
             <VBox fx:id="topProductsList" spacing="10.0" VBox.vgrow="ALWAYS">
@@ -94,7 +73,7 @@
                     <Insets top="10.0" />
                 </padding>
             </VBox>
-            <Label fx:id="lblTopProductsPlaceholder" managed="false" styleClass="placeholder-text" text="Không có dữ liệu cho tháng này." visible="false" />
+            <Label fx:id="lblTopProductsPlaceholder" managed="false" styleClass="placeholder-text" text="Không có dữ liệu." visible="false" />
         </VBox>
     </right>
 </BorderPane>

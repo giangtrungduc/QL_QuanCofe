@@ -294,7 +294,10 @@ public class SanPhamController implements Initializable {
     private void handleThem(ActionEvent event) {
         // Mở Dialog
         SanPham result = showSanPhamDialog(new SanPham(), "Thêm Sản Phẩm");
-
+        if(sanPhamDAO.isTenSanPhamTonTai(result.getTenSanPham())){
+            DialogUtils.showError("Sản phẩm đã tồn tại", "Không thể thêm sản phẩm.");
+            return;
+        }
         if (result != null) {
             new Thread(() -> {
                 int id = sanPhamDAO.insert(result);

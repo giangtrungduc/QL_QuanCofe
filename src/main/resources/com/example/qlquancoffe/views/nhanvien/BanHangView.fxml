@@ -26,7 +26,7 @@
 <BorderPane prefHeight="650.0" prefWidth="1150.0" stylesheets="@../../css/nhanvien/BanHangStyles.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.qlquancoffe.controllers.nhanvien.BanHangController">
 
     <left>
-        <TabPane styleClass="tab-panel-left" tabClosingPolicy="UNAVAILABLE">
+        <TabPane minWidth="400.0" prefHeight="650.0" prefWidth="420.0" styleClass="tab-panel-left" tabClosingPolicy="UNAVAILABLE">
             <tabs>
                 <Tab text="📦 Sản phẩm">
                     <content>
@@ -182,8 +182,8 @@
 
             <TableView fx:id="tableInvoiceItems" editable="true" minHeight="0.0" styleClass="invoice-table" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="colItemNo" editable="false" prefWidth="35" styleClass="col-center" text="STT" />
-                    <TableColumn fx:id="colItemName" editable="false" prefWidth="266.4000358581543" text="Tên sản phẩm" />
+                    <TableColumn fx:id="colItemNo" editable="false" prefWidth="49.60003399848938" styleClass="col-center" text="STT" />
+                    <TableColumn fx:id="colItemName" editable="false" prefWidth="238.39995956420898" text="Tên sản phẩm" />
                     <TableColumn fx:id="colItemQuantity" prefWidth="194.39999389648438" styleClass="col-center" text="SL" />
                     <TableColumn fx:id="colItemPrice" editable="false" prefWidth="152.800048828125" styleClass="col-price" text="Đơn giá" />
                     <TableColumn fx:id="colItemTotal" editable="false" prefWidth="150.4000244140625" styleClass="col-price" text="Thành tiền" />
@@ -212,7 +212,7 @@
                 </HBox>
                 <Separator />
                 <HBox spacing="10" styleClass="action-buttons">
-                    <Button fx:id="btnClearInvoice" onAction="#handleClearInvoice" prefHeight="45" styleClass="btn-secondary" text="🗑️ Xóa tất cả" HBox.hgrow="ALWAYS">
+                    <Button fx:id="btnClearInvoice" onAction="#handleClearInvoice" prefHeight="45" styleClass="btn-secondary" text="🗑  Xóa tất cả" HBox.hgrow="ALWAYS">
                         <tooltip><Tooltip text="Xóa tất cả sản phẩm (Ctrl+D)" /></tooltip>
                     </Button>
                     <Button fx:id="btnCancelInvoice" onAction="#handleCancelInvoice" prefHeight="45" styleClass="btn-danger" text="❌ Hủy đơn" HBox.hgrow="ALWAYS">

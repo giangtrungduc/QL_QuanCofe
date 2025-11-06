@@ -27,7 +27,7 @@ public class NhanVienController implements Initializable {
     // === FXML Fields ===
     @FXML private Label lblTongNhanVien;
     @FXML private TextField txtTimKiem;
-    @FXML private ComboBox<String> cboLocVaiTro; // "Tất cả", "QuanLy", "NhanVien"
+    @FXML private ComboBox<String> cboLocVaiTro;
     @FXML private TableView<TaiKhoan> tableNhanVien;
     @FXML private TableColumn<TaiKhoan, Integer> colID;
     @FXML private TableColumn<TaiKhoan, String> colHoTen;
@@ -40,7 +40,7 @@ public class NhanVienController implements Initializable {
     @FXML private Label lblError;
     @FXML private TextField txtHoTen;
     @FXML private TextField txtTenDangNhap;
-    @FXML private ComboBox<TaiKhoan.VaiTro> cbVaiTroForm; // Chỉ "QuanLy", "NhanVien"
+    @FXML private ComboBox<TaiKhoan.VaiTro> cbVaiTroForm;
     @FXML private PasswordField txtMatKhau;
 
     @FXML private Button btnThem;

@@ -36,10 +36,10 @@
 
             <VBox styleClass="master-pane">
                 <HBox alignment="CENTER_LEFT" spacing="10" styleClass="toolbar">
-                    <TextField fx:id="txtTimKiem" promptText="🔍 Tìm kiếm sản phẩm..." styleClass="search-field" HBox.hgrow="ALWAYS" />
+                    <TextField fx:id="txtTimKiem" maxWidth="400.0" prefWidth="374.0" promptText="🔍 Tìm kiếm sản phẩm..." styleClass="search-field" HBox.hgrow="ALWAYS" />
                     <ComboBox fx:id="cboDanhMuc" prefWidth="180.0" promptText="Tất cả danh mục" styleClass="filter-combo" />
                     <ComboBox fx:id="cboTrangThai" prefWidth="180.0" promptText="Tất cả trạng thái" styleClass="filter-combo" />
-                    <Button fx:id="btnLamMoi" onAction="#handleLamMoi" styleClass="btn-refresh" text="🔄" />
+                    <Button fx:id="btnLamMoi" minWidth="60.0" onAction="#handleLamMoi" prefWidth="60.0" styleClass="btn-refresh" text="🔄" />
                 </HBox>
 
                 <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" styleClass="product-scroll-pane" VBox.vgrow="ALWAYS">
@@ -91,8 +91,8 @@
                 <VBox spacing="10" styleClass="detail-actions">
                     <Separator />
                     <Button fx:id="btnThem" maxWidth="Infinity" onAction="#handleThem" styleClass="btn-primary" text="➕ Thêm sản phẩm mới" />
-                    <Button fx:id="btnSua" disable="true" maxWidth="Infinity" onAction="#handleSua" styleClass="btn-warning" text="✏️ Sửa sản phẩm này" />
-                    <Button fx:id="btnXoa" disable="true" maxWidth="Infinity" onAction="#handleXoa" styleClass="btn-danger" text="🗑️ Xóa sản phẩm này" />
+                    <Button fx:id="btnSua" disable="true" maxWidth="Infinity" onAction="#handleSua" styleClass="btn-warning" text="✏ Sửa sản phẩm này" />
+                    <Button fx:id="btnXoa" disable="true" maxWidth="Infinity" onAction="#handleXoa" styleClass="btn-danger" text="🗑 Xóa sản phẩm này" />
                 </VBox>
             </VBox>
         </SplitPane>
